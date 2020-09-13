@@ -6,8 +6,8 @@
     border-radius: 0;
 }
 #main-Hero {
-    background: url(../images/layout/hero-background.png) center center;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), rgba(0, 0, 0, 0.5) url("../images/layout/hero-background.png") center center;
+    background: url(http://dpwif1tvejv9j.cloudfront.net/hero-background.png) center center;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), rgba(0, 0, 0, 0.5) url("http://dpwif1tvejv9j.cloudfront.net/hero-background.png") center center;
     background-size: cover;
     color: white;
     box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);

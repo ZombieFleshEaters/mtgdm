@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\matad\\source\\repos\\mtgdm\\mtgdm\\mtgdm.csproj": {}
+    "C:\\Users\\matad\\OneDrive\\Documents\\GitHub\\mtgdm\\mtgdm\\mtgdm.csproj": {}
   },
   "projects": {
-    "C:\\Users\\matad\\source\\repos\\mtgdm\\mtgdm\\mtgdm.csproj": {
+    "C:\\Users\\matad\\OneDrive\\Documents\\GitHub\\mtgdm\\mtgdm\\mtgdm.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\matad\\source\\repos\\mtgdm\\mtgdm\\mtgdm.csproj",
+        "projectUniqueName": "C:\\Users\\matad\\OneDrive\\Documents\\GitHub\\mtgdm\\mtgdm\\mtgdm.csproj",
         "projectName": "mtgdm",
-        "projectPath": "C:\\Users\\matad\\source\\repos\\mtgdm\\mtgdm\\mtgdm.csproj",
+        "projectPath": "C:\\Users\\matad\\OneDrive\\Documents\\GitHub\\mtgdm\\mtgdm\\mtgdm.csproj",
         "packagesPath": "C:\\Users\\matad\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\matad\\source\\repos\\mtgdm\\mtgdm\\obj\\",
+        "outputPath": "C:\\Users\\matad\\OneDrive\\Documents\\GitHub\\mtgdm\\mtgdm\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
