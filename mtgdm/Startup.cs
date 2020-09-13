@@ -41,7 +41,25 @@ namespace mtgdm
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDefaultIdentity<IdentityUser>()
+                    .AddRoles<IdentityRole>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>();
+
             services.AddRazorPages().AddRazorRuntimeCompilation();
+            services.AddAuthentication()
+                    .AddGoogle(options =>
+                    {
+                        options.ClientId = Configuration["Google.OAuth.ClientID"];
+                        options.ClientSecret = Configuration["Google.OAuth.ClientSecret"];
+                        options.AccessDeniedPath = "/AccessDenied";
+                    })
+                    .AddFacebook(options =>
+                    {
+                        options.AppId = Configuration["Facebook.OAuth.AppID"];
+                        options.AppSecret = Configuration["Facebook.OAuth.AppSecret"];
+                        options.AccessDeniedPath = "/AccessDenied";
+                    });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

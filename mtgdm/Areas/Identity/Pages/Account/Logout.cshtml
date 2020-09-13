@@ -1,0 +1,18 @@
+﻿@page
+@model LogoutModel
+@{
+    ViewData["Title"] = "Log out";
+}
+
+    <section class="section">
+        @*<h1 class="title has-text-centered">@ViewData["Title"]</h1>*@
+        <div class="columns">
+            <div class="column is-4 is-offset-4 box">
+                <div class="notification is-info">
+                    You have successfully logged out.
+                </div>
+                <a asp-page="/Index">Go home</a>
+            </div>
+        </div>
+        
+    </section>
