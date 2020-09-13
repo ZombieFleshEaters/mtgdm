@@ -1,0 +1,24 @@
+﻿@page
+
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+@model mtdgm.Pages.TestModel
+@{
+}
+
+
+<section class="section">
+    <h1 class="title has-text-centered">File upload</h1>
+    <form method="post">
+        <div class="columns">
+            <div class="column is-4 is-offset-4 box">
+                <div class="buttons">
+                    <button type="submit" class="button is-success">Add</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="content">
+    </div>
+</section>
