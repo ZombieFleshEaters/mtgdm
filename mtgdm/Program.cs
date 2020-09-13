@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using mtdgm.ConfigurationProvider;
+using mtgdm.ConfigurationProvider;
 
 namespace mtgdm
 {

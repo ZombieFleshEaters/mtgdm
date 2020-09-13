@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using mtgdm.ConfigurationProvider;
 
-namespace mtdgm.ConfigurationProvider
+namespace mtgdm.ConfigurationProvider
 {
     public static class EntityFrameworkExtensions
     {

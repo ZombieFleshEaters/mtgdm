@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace mtdgm.Pages
+namespace mtgdm.Pages
 {
     public class UploadConfirmModel : PageModel
     {
