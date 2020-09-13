@@ -332,3 +332,7 @@ ASALocalRun/
 *.png
 *.dll
 mtgdm/bin/Debug/netcoreapp3.1/mtgdm.dll
+mtgdm/obj/Debug/netcoreapp3.1/mtgdm.Views.dll
+mtgdm/bin/Debug/netcoreapp3.1/mtgdm.Views.dll
+mtgdm/obj/Debug/netcoreapp3.1/mtgdm.Views.pdb
+mtgdm/bin/Debug/netcoreapp3.1/mtgdm.Views.pdb
