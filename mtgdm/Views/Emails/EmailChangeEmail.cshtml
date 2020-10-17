@@ -1,0 +1,12 @@
+﻿@using mtgdm.Views.Emails.Callback
+@using mtgdm.Views.Shared
+
+@model EmailCallbackViewModel
+
+@{
+    ViewData["EmailTitle"] = "Confirm your email";
+    ViewData["EmailButtonText"] = "Confirm email";
+    ViewData["EmailButtonURL"] = @Model.ConfirmEmailUrl;
+}
+
+    <p>You have requested to change your email address. Please confirm your new email address by clicking the button below.</p>

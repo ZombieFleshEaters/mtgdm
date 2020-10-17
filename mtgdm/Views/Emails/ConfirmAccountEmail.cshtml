@@ -1,0 +1,12 @@
+﻿@using mtgdm.Views.Emails.Callback
+@using mtgdm.Views.Shared
+
+@model EmailCallbackViewModel
+
+@{
+    ViewData["EmailTitle"] = "Complete registration";
+    ViewData["EmailButtonText"] = "Confirm email";
+    ViewData["EmailButtonURL"] = @Model.ConfirmEmailUrl;
+}
+
+<p>We are excited to have you get started and start showing off. First, you will need to complete your registation by clicking the button below.</p>

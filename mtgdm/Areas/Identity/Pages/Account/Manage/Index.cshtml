@@ -1,29 +1,50 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = "Change your display name";
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
-<h4>@ViewData["Title"]</h4>
-<partial name="_StatusMessage" model="Model.StatusMessage" />
-<div class="row">
-    <div class="col-md-6">
-        <form id="profile-form" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Username"></label>
-                <input asp-for="Username" class="form-control" disabled />
+    <form id="profile-form" method="post">
+        <div class="column is-8">
+            <div class="title is-5">@ViewData["Title"]</div>
+            <div asp-validation-summary="ModelOnly" class="field notification is-danger is-light"></div>
+            <div class="field notification is-warning is-light">
+                <span class="icon is-left">
+                    <i class="fas fa-exclamation-triangle" title="Warning"></i>
+                </span>
+                <span>Your display name is used to log in</span>
             </div>
-            <div class="form-group">
-                <label asp-for="Input.PhoneNumber"></label>
-                <input asp-for="Input.PhoneNumber" class="form-control" />
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            @if (!string.IsNullOrEmpty(Model.StatusMessage))
+            {
+                <div class="field notification is-success is-light">
+                    <span class="icon is-left">
+                        <i class="fas fa-check" title="Success"></i>
+                    </span>
+                    <span>@Model.StatusMessage</span>
+                </div>
+            }
+            <div class="content">
+                <div class="field">
+                    <div class="control has-icons-left">
+                        <input class="input" asp-for="Input.DisplayName" placeholder="Display name" autocomplete="off">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-user"></i>
+                        </span>
+                    </div>
+                    <span class="help is-danger" asp-validation-for="Input.DisplayName"></span>
+                </div>
+                <div class="buttons">
+                    <button class="button is-primary" type="submit">
+                        <span class="icon is-large is-left">
+                            <i class="fas fa-save fa-lg"></i>
+                        </span>
+                        <span>Save</span>
+                    </button>
+                </div>
             </div>
-            <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
-        </form>
-    </div>
-</div>
+        </div>
+    </form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

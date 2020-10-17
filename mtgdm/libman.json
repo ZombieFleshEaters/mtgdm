@@ -1,0 +1,19 @@
+{
+  "version": "1.0",
+  "defaultProvider": "jsdelivr",
+  "libraries": [
+    {
+      "library": "@creativebulma/bulma-divider@1.1.0",
+      "destination": "wwwroot/lib/@creativebulma/bulma-divider/"
+    },
+    {
+      "library": "@creativebulma/bulma-tagsinput@1.0.3",
+      "destination": "wwwroot/lib/@creativebulma/bulma-tagsinput/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jquery.blockUI@2.70",
+      "destination": "wwwroot/lib/jquery.blockUI/"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+﻿@page
+@model mtgdm.Areas.Identity.Pages.Showpiece.AddModel
+@{
+    ViewData["Title"] = "Add a showpiece";
+    ViewData["ReturnURL"] = Url.Page("/Showpiece/Add");
+}
+
+
+<nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+    <ul>
+        <li><a asp-page="/Showpiece/List">Gallery</a></li>
+        <li class="is-active"><a asp-page="/Showpice/Add">Add showpiece</a></li>
+    </ul>
+</nav>
+
+<form class="form-is-clean" method="post" enctype="multipart/form-data">
+    <div class="column is-8 box">
+        <div class="notification is-info content field">
+            <h4 class="title is-4">Rules</h4>
+            <ul>
+                <li>Must be 2x3 aspect ratio, for example 1200 by 1800 pixels</li>
+                <li>Must be be an image file format: bmp, jpg, jpeg, png, jfif, webp</li>
+                <li>Cannot be a gif or svg</li>
+                <li>Files cannot be greater than 5 MB (megabytes)</li>
+            </ul>
+        </div>
+
+        <div asp-validation-summary="ModelOnly" class="field notification is-danger is-light"></div>
+        <div class="field">
+            <div id="file-upload" class="file is-primary has-name is-fullwidth">
+                <label class="file-label">
+                    <input class="file-input" asp-for="FileUpload" type="file">
+                    <span class="file-cta">
+                        <span class="file-icon">
+                            <i class="fas fa-upload fa-lg"></i>
+                        </span>
+                        <span class="file-label">
+                            Upload image
+                        </span>
+                    </span>
+                    <span class="file-name">
+                        @Model.FileUpload?.FileName
+                    </span>
+                </label>
+            </div>
+            @Html.ValidationMessage("Validation.FileUpload.FileIsBlank", "", new { @class = "help is-danger" }, "")
+        </div>
+
+        <div class="field">
+            <div class="control has-icons-left has-icons-right">
+                <input class="input" asp-for="Showpiece.Title" placeholder="@Html.DisplayNameFor(d=>d.Showpiece.Title)" autocomplete="off">
+                <span class="icon is-large is-left">
+                    <i class="fas fa-film fa-lg" title="Film title"></i>
+                </span>
+            </div>
+            <span class="help is-danger" asp-validation-for="Showpiece.Title"></span>
+            @Html.ValidationMessage("Validation.Title.IsUsed", "", new { @class = "help is-danger" }, "")
+        </div>
+        <div class="field">
+            <textarea class="textarea" asp-for="Showpiece.Synopsis" placeholder="@Html.DisplayNameFor(d=>d.Showpiece.Synopsis)"></textarea>
+        </div>
+
+        <div class="field">
+            <div class="control">
+                <select multiple data-type="tags" data-placeholder="Choose genres (Optional)" asp-for="@Model.Genres" asp-items="Model.GenreChoices">
+                </select>
+            </div>
+        </div>
+
+        <div class="buttons are-small">
+            <button type="submit" class="button is-primary block-ui">
+                <span class="icon"><i class="fas fa-save fa-lg"></i></span><span>Save</span>
+            </button>
+            <a asp-page="/Showpiece/List" class="button is-danger is-light">
+                <span class="icon"><i class="fas fa-times fa-lg"></i></span><span>Cancel</span>
+            </a>
+        </div>
+    </div>
+</form>

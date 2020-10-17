@@ -1,0 +1,53 @@
+﻿@page
+@model mtgdm.Areas.Identity.Pages.Showpiece.EditModel
+@{
+    ViewData["Title"] = "Edit showpiece";
+    ViewData["ReturnURL"] = Url.Page("/Showpiece/Edit", new { Model.Showpiece.ShowpieceID });
+}
+
+<nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+    <ul>
+        <li><a asp-page="/Showpiece/List">Gallery</a></li>
+        <li class="is-active"><a asp-page="/Showpice/Edit" asp-route-ShowpieceID="@Model.Showpiece.ShowpieceID">Edit showpiece</a></li>
+    </ul>
+</nav>
+
+<form class="form-is-clean" method="post" enctype="multipart/form-data">
+    <div class="column is-8 box">
+        <div asp-validation-summary="ModelOnly" class="field notification is-danger is-light"></div>
+        <div class="field">
+            <div class="control has-icons-left has-icons-right">
+                <input class="input" asp-for="Showpiece.Title" placeholder="@Html.DisplayNameFor(d=>d.Showpiece.Title)" autocomplete="off">
+                <span class="icon is-large is-left">
+                    <i class="fas fa-film fa-lg" title="Film title"></i>
+                </span>
+            </div>
+            <span class="help is-danger" asp-validation-for="Showpiece.Title"></span>
+            @Html.ValidationMessage("Validation.Title.IsUsed", "", new { @class = "help is-danger" }, "")
+        </div>
+        <div class="field">
+            <textarea class="textarea" asp-for="Showpiece.Synopsis" placeholder="@Html.DisplayNameFor(d=>d.Showpiece.Synopsis)"></textarea>
+        </div>
+
+        <div class="field">
+            <div class="control">
+                <select multiple data-type="tags" data-placeholder="Choose genres" asp-for="@Model.Genres" asp-items="Model.GenreChoices">
+                </select>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button type="submit" class="button is-primary">
+                <span class="icon"><i class="fas fa-save fa-lg"></i></span><span>Save</span>
+            </button>
+            <a asp-page="/Showpiece/View" asp-route-ShowpieceID="@Model.Showpiece.ShowpieceID" class="button is-danger is-light">
+                <span class="icon"><i class="fas fa-times fa-lg"></i></span><span>Cancel</span>
+            </a>
+        </div>
+    </div>
+    @Html.HiddenFor(h => h.Showpiece.ShowpieceID)
+    @Html.HiddenFor(h => h.Showpiece.URL)
+    @Html.HiddenFor(h => h.Showpiece.Published)
+    @Html.HiddenFor(h => h.Showpiece.Created)
+    @Html.HiddenFor(h => h.Showpiece.UserID)
+</form>

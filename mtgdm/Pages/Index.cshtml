@@ -2,6 +2,7 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
+    ViewData["ReturnURL"] = Url.Page("/index");
 }
 
 <div id="main-hero" class="hero is-black is-bold is-fullheight-with-navbar">
@@ -14,7 +15,7 @@
                         <section class="section"></section>
                         <section class="section is-mobile"></section>
                         <h1 class="title has-text-primary-light text is-size-1 is-size-4-mobile">Make this god damn movie</h1>
-                        <h2 id="mtgdm_subtitle" class="subtitle is-size-3 is-size-6-mobile">The last best place for movie posters and box art.</h2>
+                        <h2 id="mtgdm_subtitle" class="subtitle is-size-3 is-size-6-mobile">The <span class="has-text-link">last best place</span>  for movie posters and box art</h2>
                     </div>
                 </div>
             </div>
@@ -58,7 +59,7 @@
             </div>
             <div class="column">
                 <div class="box border-light">
-                    <p class="title">Sourced</p>
+                    <p class="title">Source</p>
                     <p class="subtitle is-4">Assets <span class="title has-text-danger is-4">cannot</span> be copyrighted</p>
                 </div>
             </div>

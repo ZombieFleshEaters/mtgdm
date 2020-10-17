@@ -1,26 +1,37 @@
 ﻿@page
 @model PersonalDataModel
 @{
-    ViewData["Title"] = "Personal Data";
+    ViewData["Title"] = "Personal data";
     ViewData["ActivePage"] = ManageNavPages.PersonalData;
 }
 
-<h4>@ViewData["Title"]</h4>
+    <form id="download-data" asp-page="DownloadPersonalData" method="post">
 
-<div class="row">
-    <div class="col-md-6">
-        <p>Your account contains personal data that you have given us. This page allows you to download or delete that data.</p>
-        <p>
-            <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
-        </p>
-        <form id="download-data" asp-page="DownloadPersonalData" method="post" class="form-group">
-            <button class="btn btn-primary" type="submit">Download</button>
-        </form>
-        <p>
-            <a id="delete" asp-page="DeletePersonalData" class="btn btn-primary">Delete</a>
-        </p>
-    </div>
-</div>
+        <div class="column is-8">
+            <div class="title is-5">@ViewData["Title"]</div>
+            <div asp-validation-summary="ModelOnly" class="field notification is-danger is-light"></div>
+            <div class="content box">
+                <p>Your account contains personal data that you have given us. This page allows you to download or delete that data.</p>
+                <p>
+                    <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
+                </p>
+                <div class="buttons">
+                    <button class="button is-primary" type="submit">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-download"></i>
+                        </span>
+                        <span>Download</span>
+                    </button>
+                    <a asp-page="DeletePersonalData" class="button is-danger">
+                        <span class="icon is-left">
+                            <i class="fas fa-trash-alt" title="Remove"></i>
+                        </span>
+                        <span>Delete personal data</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

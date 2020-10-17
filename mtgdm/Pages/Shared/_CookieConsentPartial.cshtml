@@ -1,0 +1,31 @@
+﻿@using Microsoft.AspNetCore.Http.Features
+
+@{
+    var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
+    var showBanner = !consentFeature?.CanTrack ?? false;
+    var cookieString = consentFeature?.CreateConsentCookie();
+}
+
+@if (showBanner)
+{
+    <nav id="cookieConsent" class="navbar is-fixed-bottom">
+        <div class="navbar-item">
+            <div class="notification is-primary content">
+                <p>We use cookies to improve your browsing experience on our website.</p>
+                <p>By browsing our website, you consent to our use of cookies and other tracking technologies.
+                <div class="buttons">
+                    <a asp-page="/Cookies" type="button" class="button" data-dismiss="alert" aria-label="Close" data-cookie-string="@cookieString">
+                        <span aria-hidden="true">How we use cookies</span>
+                    </a>
+                    <a asp-page="/Privacy" type="button" class="button" data-dismiss="alert" aria-label="Close" data-cookie-string="@cookieString">
+                        <span aria-hidden="true">View privacy policy</span>
+                    </a>
+                    <button type="button" class="button is-success is-light" data-dismiss="alert" aria-label="Close" data-cookie-string="@cookieString">
+                        <span aria-hidden="true">Accept and close</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+}
+

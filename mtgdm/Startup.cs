@@ -17,6 +17,8 @@ using Microsoft.Net.Http.Headers;
 using Microsoft.Extensions.Primitives;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using mtgdm.Services;
 
 namespace mtgdm
 {
@@ -42,10 +44,29 @@ namespace mtgdm
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddDefaultIdentity<IdentityUser>(options =>
+                    {
+                        options.SignIn.RequireConfirmedAccount = true;
+                        options.SignIn.RequireConfirmedEmail = true;
+                        options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+/ ";
+                        options.User.RequireUniqueEmail = true;
+                    })
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>();
-
+            services.Configure<Services.EmailSettings>(options=>
+                    {
+                        options.ApiKey = Configuration["Mailgun.Private.APIKey"];
+                        options.RequestUri = Configuration["Mailgun.Uri.Request"];
+                        options.ApiBaseUri = Configuration["Mailgun.Uri.Base"];
+                        options.From = Configuration["Mailgun.From"];
+                    });
+            services.Configure<CookiePolicyOptions>(options =>
+                    {
+                        options.CheckConsentNeeded = context => true;
+                        options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
+                    });
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddScoped<IRazorViewToStringRenderer, RazorViewToStringRenderer>();
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddAuthentication()
                     .AddGoogle(options =>
@@ -86,8 +107,15 @@ namespace mtgdm
             });
             app.UseResponseCompression(); //Must come before UseStaticFiles
 
-            app.UseStaticFiles();
-
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    const int durationInSeconds = 60 * 60 * 24; //24 hours
+                    ctx.Context.Response.Headers.Append(HeaderNames.CacheControl, $"public, max-age={durationInSeconds}");
+                }
+            });
+            app.UseCookiePolicy();
             app.UseRouting();
 
             app.UseAuthentication();

@@ -1,0 +1,55 @@
+﻿@page
+@model mtgdm.Pages.Admin.SystemValues.AddModel
+@{
+}
+
+<section class="section container">
+    <div class="columns is-centered">
+        <div class="column is-10">
+            <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+                <ul>
+                    <li><a asp-page="/Admin/Index">Admin</a></li>
+                    <li><a asp-page="/Admin/SystemValues/List">System Values</a></li>
+                    <li class="is-active"><a href="/">Add</a></li>
+                </ul>
+            </nav>
+            <form class="form-is-clean" method="post">
+                <div class="column is-8 box">
+
+                    <div asp-validation-summary="ModelOnly" class="field notification is-danger is-light"></div>
+                    <div class="field">
+                        <div class="control has-icons-left has-icons-right">
+                            <input class="input" asp-for="SystemValue.Key" placeholder="Title" autocomplete="off">
+                            <span class="icon is-large is-left">
+                                <i class="fas fa-key fa-lg" title="Key"></i>
+                            </span>
+                        </div>
+                        <span class="help is-danger" asp-validation-for="SystemValue.Key"></span>
+                        @Html.ValidationMessage("Validation.Key.Duplicate", "", new { @class = "help is-danger" }, "")
+                    </div>
+
+                    <div class="field">
+                        <div class="control has-icons-left has-icons-right">
+                            <input class="input" asp-for="SystemValue.Value" placeholder="Title" autocomplete="off">
+                            <span class="icon is-large is-left">
+                                <i class="fas fa-edit fa-lg" title="Film title"></i>
+                            </span>
+                        </div>
+                        <span class="help is-danger" asp-validation-for="SystemValue.Value"></span>
+                    </div>
+
+                    @Html.HiddenFor(h => h.SystemValue.Key)
+                    <div class="buttons">
+                        <button type="submit" class="button is-primary">
+                            <span class="icon"><i class="fas fa-save fa-lg"></i></span><span>Save</span>
+                        </button>
+                        <a asp-page="/Admin/SystemValues/List" class="button is-danger is-light">
+                            <span class="icon"><i class="fas fa-times fa-lg"></i></span><span>Cancel</span>
+                        </a>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

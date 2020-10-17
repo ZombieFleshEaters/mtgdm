@@ -5,25 +5,36 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
+    @*<form id="logoutForm" class="navbar-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">*@
+    <form id="logoutForm" class="navbar-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@ViewData["ReturnURL"]" method="post">
     <div class="navbar-end">
         <div class="navbar-item">
-            <a class="label" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
-        </div>
-        <div class="navbar-item">
-            <button class="button" type="submit"><span class="icon"><i class="fas fa-sign-out-alt" title="Log out"></i></span><span>Log out</span></button>
+            <div class="buttons">
+                <a class="button is-primary" asp-area="Identity" asp-page="/Account/Manage/Index" title="Settings">
+                    <span class="icon">
+                        <i class="fas fa-cog fa-lg"></i>
+                    </span>
+                    
+                </a>
+                <button class="button" type="submit">
+                    <span class="icon">
+                        <i class="fas fa-sign-out-alt" title="Log out"></i>
+                    </span>
+                    <span>Log out</span>
+                </button>
+            </div>
         </div>
     </div>
-
+    </form>
 }
 else
 {
     <div class="navbar-end">
         <div class="navbar-item">
             <div class="buttons">
-                <a class="button" asp-area="Identity" asp-page="/Account/Register"><span class="icon"><i class="fas fa-user-plus" title="Register"></i></span><span>Register</span></a>
-                <a class="button is-primary" asp-area="Identity" asp-page="/Account/Login"><span class="icon"><i class="fas fa-sign-in-alt" title="Log in"></i></span><span>Log in</span></a>
+                <a class="button" asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl="@ViewData["ReturnURL"]"><span class="icon"><i class="fas fa-user-plus" title="Register"></i></span><span>Register</span></a>
+                <a class="button is-primary" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@ViewData["ReturnURL"]"><span class="icon"><i class="fas fa-sign-in-alt" title="Log in"></i></span><span>Log in</span></a>
             </div>
         </div>
     </div>
 }
-

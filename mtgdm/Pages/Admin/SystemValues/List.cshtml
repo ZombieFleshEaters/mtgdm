@@ -1,0 +1,64 @@
+﻿@page
+@model mtgdm.Pages.Admin.SystemValues.ListModel
+@{
+}
+
+<div class="columns is-vertical">
+    <div class="column">
+        <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+            <ul>
+                <li><a asp-page="/Admin/Index">Admin</a></li>
+                <li class="is-active"><a href="/">System Values</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="column">
+        <div class="level">
+            <div class="level-left"></div>
+            <div class="level-right">
+                <div class="buttons">
+                    <a asp-page="/Admin/SystemValues/Add" class="button is-primary is-small is-rounded">
+                        <span class="icon">
+                            <i class="fas fa-plus fa-lg"></i>
+                        </span>
+                        <span>Add system value</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (Model.SystemValues.Count > 0)
+{
+    <table class="table is-striped is-full-width">
+        <thead>
+            <tr>
+                <th>Key</th>
+                <th>Value</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var value in Model.SystemValues)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(v => value.Key)</td>
+                    <td class="is-hidden-touch">@Html.DisplayFor(v => value.Value)</td>
+                    <td>
+                        <a asp-page="/Admin/SystemValues/Edit" asp-route-SystemValueKey="@value.Key" class="button is-small is-primary">
+                            <span class="icon"><i class="fas fa-edit"></i></span><span>Edit</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-page="/Admin/SystemValues/Delete" asp-route-SystemValueKey="@value.Key" class="button is-small is-danger is-light">
+                            <span class="icon"><i class="fas fa-trash-alt"></i></span><span>Delete</span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

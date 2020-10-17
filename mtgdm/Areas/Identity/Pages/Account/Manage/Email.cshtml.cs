@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using mtgdm.Services;
+using mtgdm.Views.Emails.Callback;
 
 namespace mtgdm.Areas.Identity.Pages.Account.Manage
 {
@@ -18,15 +20,16 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IEmailSender _emailSender;
-
-        public EmailModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
-            IEmailSender emailSender)
+        private readonly IRazorViewToStringRenderer _razorViewToStringRenderer;
+        public EmailModel(UserManager<IdentityUser> userManager,
+                          SignInManager<IdentityUser> signInManager,
+                          IEmailSender emailSender,
+                          IRazorViewToStringRenderer razorViewToStringRenderer)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _razorViewToStringRenderer = razorViewToStringRenderer;
         }
 
         public string Username { get; set; }
@@ -36,14 +39,17 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
         public bool IsEmailConfirmed { get; set; }
 
         [TempData]
-        public string StatusMessage { get; set; }
+        public bool ChangeEmailConfirmationSent { get; set; }
+
+        [TempData]
+        public string ChangeEmailStatusMessage { get; set; }
 
         [BindProperty]
         public InputModel Input { get; set; }
 
         public class InputModel
         {
-            [Required]
+            //[Required]
             [EmailAddress]
             [Display(Name = "New email")]
             public string NewEmail { get; set; }
@@ -58,7 +64,7 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
             {
                 NewEmail = email,
             };
-
+            
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
         }
 
@@ -67,7 +73,7 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return new RedirectResult("/Identity/Account/Login");
             }
 
             await LoadAsync(user);
@@ -79,7 +85,7 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return new RedirectResult("/Identity/Account/Login");
             }
 
             if (!ModelState.IsValid)
@@ -93,54 +99,21 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
             {
                 var userId = await _userManager.GetUserIdAsync(user);
                 var code = await _userManager.GenerateChangeEmailTokenAsync(user, Input.NewEmail);
-                var callbackUrl = Url.Page(
-                    "/Account/ConfirmEmailChange",
-                    pageHandler: null,
-                    values: new { userId = userId, email = Input.NewEmail, code = code },
-                    protocol: Request.Scheme);
-                await _emailSender.SendEmailAsync(
-                    Input.NewEmail,
-                    "Confirm your email",
-                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                var callbackUrl = Url.Page("/Account/ConfirmEmailChange",
+                                           pageHandler: null,
+                                           values: new { userId = userId, email = Input.NewEmail, code = code },
+                                           protocol: Request.Scheme);
 
-                StatusMessage = "Confirmation link to change email sent. Please check your email.";
+                var emailCallback = new EmailCallbackViewModel(callbackUrl);
+                string body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/EmailChangeEmail.cshtml", emailCallback);
+                await _emailSender.SendEmailAsync(Input.NewEmail, "MTGDM - Confirm your email", body);
+
+                ChangeEmailStatusMessage = "Check your email for a link to change your email address. If it doesn’t appear within a few minutes, check your spam folder.";
                 return RedirectToPage();
             }
-
-            StatusMessage = "Your email is unchanged.";
-            return RedirectToPage();
-        }
-
-        public async Task<IActionResult> OnPostSendVerificationEmailAsync()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                await LoadAsync(user);
-                return Page();
-            }
-
-            var userId = await _userManager.GetUserIdAsync(user);
-            var email = await _userManager.GetEmailAsync(user);
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var callbackUrl = Url.Page(
-                "/Account/ConfirmEmail",
-                pageHandler: null,
-                values: new { area = "Identity", userId = userId, code = code },
-                protocol: Request.Scheme);
-            await _emailSender.SendEmailAsync(
-                email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-            StatusMessage = "Verification email sent. Please check your email.";
-            return RedirectToPage();
+            Email = email;
+            ModelState.AddModelError("Validation.SameEmail", "Email addresses are the same");
+            return Page();
         }
     }
 }

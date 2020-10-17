@@ -13,8 +13,11 @@ namespace mtgdm.Data
         {
         }
 
-        public virtual DbSet<SystemValues> SystemValues { get; set; }
-        public virtual DbSet<Test> Test { get; set; }
-
+        public virtual DbSet<SystemValue> SystemValue { get; set; }
+        public virtual DbSet<Showpiece> Showpiece { get; set; }
+        public virtual DbSet<ShowpieceRating> ShowpieceRating { get; set; }
+        public virtual DbSet<Genre> Genre { get; set; }
+        public virtual DbSet<ShowpieceToGenre> ShowpieceToGenre { get; set; }
+        public virtual DbSet<Comment> Comment { get; set; }
     }
 }

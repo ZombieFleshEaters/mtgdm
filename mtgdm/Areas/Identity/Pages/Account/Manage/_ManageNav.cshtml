@@ -2,14 +2,44 @@
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
-<ul class="nav nav-pills flex-column">
-    <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Profile</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">Email</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a></li>
-    @if (hasExternalLogins)
-    {
-        <li id="external-logins" class="nav-item"><a id="external-login" class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins">External logins</a></li>
-    }
-    <li class="nav-item"><a class="nav-link @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="two-factor" asp-page="./TwoFactorAuthentication">Two-factor authentication</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Personal data</a></li>
-</ul>
+
+
+<nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+    <ul>
+        <li class="is-active"><a asp-page="/Showpiece/List">Manage your profile</a></li>
+    </ul>
+</nav>
+<div class="tabs">
+    <ul>
+        <li class="@ManageNavPages.IndexNavClass(ViewContext)">
+            <a asp-page="./Index">
+                <span class="icon is-small"><i class="far fa-id-card" aria-hidden="true"></i></span>
+                <span>Profile</span>
+            </a>
+        </li>
+        <li class="@ManageNavPages.EmailNavClass(ViewContext)">
+            <a asp-page="./Email">
+                <span class="icon is-small"><i class="fas fa-envelope" aria-hidden="true"></i></span>
+                <span>Email</span>
+            </a>
+        </li>
+        <li class="@ManageNavPages.ChangePasswordNavClass(ViewContext)">
+            <a asp-page="./ChangePassword">
+                <span class="icon is-small"><i class="fas fa-key" aria-hidden="true"></i></span>
+                <span>Password</span>
+            </a>
+        </li>
+        <li class="@ManageNavPages.ExternalLoginsNavClass(ViewContext)">
+            <a asp-page="./ExternalLogins">
+                <span class="icon is-small"><i class="fas fa-link" aria-hidden="true"></i></span>
+                <span>External logins</span>
+            </a>
+        </li>
+        <li class="@ManageNavPages.PersonalDataNavClass(ViewContext)">
+            <a asp-page="./PersonalData">
+                <span class="icon is-small"><i class="fas fa-user-lock" aria-hidden="true"></i></span>
+                <span>Personal data</span>
+            </a>
+        </li>
+    </ul>
+</div>

@@ -4,5 +4,35 @@
     ViewData["Title"] = "Confirm email change";
 }
 
-<h1>@ViewData["Title"]</h1>
-<partial name="_StatusMessage" model="Model.StatusMessage" />
+<section class="section">
+    <form method="post">
+        <h1 class="title has-text-centered">@ViewData["Title"]</h1>
+        <div class="columns is-centered">
+            <div class="column is-6 box">
+                <div asp-validation-summary="ModelOnly" class="field notification is-danger is-light"></div>
+                @if (!string.IsNullOrEmpty(Model.StatusMessage))
+                {
+                    <div class="field notification is-success is-light">
+                        <span class="icon is-left">
+                            <i class="fas fa-check" title="Success"></i>
+                        </span>
+                        <span>@Model.StatusMessage</span>
+                    </div>
+                }
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a class="button" asp-page="/Account/Manage/Email">
+                        <span>Return to email edit</span>
+                    </a>
+                }
+                else
+                {
+                    <a class="button is-primary" asp-page="./Login">
+                        <span>Continue to log in</span>
+                    </a>
+                }
+
+            </div>
+        </div>
+    </form>
+</section>

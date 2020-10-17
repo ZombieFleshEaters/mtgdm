@@ -1,4 +1,5 @@
 ﻿
+
 #mtgdm_subtitle {
     color: rgba(255,255,255,.70);
 }
@@ -6,20 +7,56 @@
     border-radius: 0;
 }
 #main-Hero {
-    background: url(http://dpwif1tvejv9j.cloudfront.net/hero-background.png) center center;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), rgba(0, 0, 0, 0.5) url("http://dpwif1tvejv9j.cloudfront.net/hero-background.png") center center;
+    background: url(https://dpwif1tvejv9j.cloudfront.net/hero-background.png) center center;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), rgba(0, 0, 0, 0.5) url("https://dpwif1tvejv9j.cloudfront.net/hero-background.png") center center;
     background-size: cover;
     color: white;
     box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
+
+#section-main {
+    padding: 1.5rem;
+}
+
 #logoutForm {
     margin: 0;
     padding: 0;
 }
-#signin-google {
+
+.is-google {
     background-color: #4285F4;
 }
 
-#signin-facebook {
+.is-facebook {
     background-color: #385499;
+}
+
+.form-is-clean{
+    margin-bottom: 0;
+}
+
+.right-left {
+    display: flex;
+    justify-content: space-between;
+}
+.equal-height {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.equal-height .card-content {
+    flex: auto;
+}
+
+.showpiece-comment {
+    white-space: pre-line;
+}
+.footer {
+    padding: 2rem 1.5rem 2rem;
+}
+@media screen and (max-width:768px) {
+    .level-left + .level-right {
+         margin-top: 0;
+    }
 }

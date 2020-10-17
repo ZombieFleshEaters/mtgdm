@@ -22,8 +22,8 @@ namespace mtgdm.Areas.Identity.Pages.Account
         private readonly ILogger<LoginModel> _logger;
 
         public LoginModel(SignInManager<IdentityUser> signInManager, 
-            ILogger<LoginModel> logger,
-            UserManager<IdentityUser> userManager)
+                          ILogger<LoginModel> logger,
+                          UserManager<IdentityUser> userManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -42,9 +42,7 @@ namespace mtgdm.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
-            public string Email { get; set; }
+            public string Username { get; set; }
 
             [Required]
             [DataType(DataType.Password)]
@@ -60,8 +58,9 @@ namespace mtgdm.Areas.Identity.Pages.Account
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
-
-            returnUrl = returnUrl ?? Url.Content("~/");
+            if (returnUrl == "/")
+                returnUrl = null;
+            returnUrl = returnUrl ?? Url.Page("/Showpiece/List");
 
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -73,16 +72,20 @@ namespace mtgdm.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
+            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            if (returnUrl == "/")
+                returnUrl = null;
+            returnUrl = returnUrl ?? Url.Page("/Showpiece/List");
 
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
+                    _logger.LogInformation("User logged in");
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -91,12 +94,12 @@ namespace mtgdm.Areas.Identity.Pages.Account
                 }
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("User account locked out.");
+                    _logger.LogWarning("User account locked out");
                     return RedirectToPage("./Lockout");
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt");
                     return Page();
                 }
             }

@@ -4,30 +4,47 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
-<h4 id="external-login-title">Associate your @Model.ProviderDisplayName account.</h4>
-<hr />
-
-<p id="external-login-description" class="text-info">
-    You've successfully authenticated with <strong>@Model.ProviderDisplayName</strong>.
-    Please enter an email address for this site below and click the Register button to finish
-    logging in.
-</p>
-
-<div class="row">
-    <div class="col-md-4">
-        <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Input.Email"></label>
-                <input asp-for="Input.Email" class="form-control" />
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+<form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+    <div class="columns is-centered">
+        <div class="column is-6 box">
+            <div class="field notification is-success is-light">
+                <p>
+                    You've successfully authenticated with <strong>@Model.ProviderDisplayName</strong>.
+                </p><br />
+                <p>
+                    After updating your details, check your email for a link to confirm your registration. If it doesn’t appear within a few minutes, check your spam folder.
+                </p>
             </div>
-            <button type="submit" class="btn btn-primary">Register</button>
-        </form>
-    </div>
-</div>
+            <div asp-validation-summary="ModelOnly" class="field notification is-danger is-light"></div>
+            <div class="field">
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input" asp-for="Input.DisplayName" placeholder="Display name" autocomplete="off">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-user" title="Display name"></i>
+                    </span>
+                </div>
+                <span class="help is-danger" asp-validation-for="Input.DisplayName"></span>
+            </div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+            <div class="field">
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input" asp-for="Input.Email" type="email" placeholder="Email" autocomplete="off">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-envelope" title="Email"></i>
+                    </span>
+                </div>
+                <span class="help is-danger" asp-validation-for="Input.Email"></span>
+            </div>
+
+            <div class="buttons">
+                <button class="button is-primary" type="submit">
+                    <span class="icon is-large is-left">
+                        <i class="far fa-paper-plane fa-lg"></i>
+                    </span>
+                    <span>Save and send verification email</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+

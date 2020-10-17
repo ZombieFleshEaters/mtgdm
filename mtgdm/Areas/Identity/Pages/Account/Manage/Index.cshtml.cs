@@ -22,8 +22,6 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
             _signInManager = signInManager;
         }
 
-        public string Username { get; set; }
-
         [TempData]
         public string StatusMessage { get; set; }
 
@@ -32,6 +30,10 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
+            [Required]
+            [Display(Name = "Display name")]
+            public string DisplayName { get; set; }
+
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
@@ -42,11 +44,12 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
-            Username = userName;
+            //Username = userName;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                DisplayName =  userName
             };
         }
 
@@ -55,7 +58,7 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return new RedirectResult("/Identity/Account/Login");
             }
 
             await LoadAsync(user);
@@ -64,10 +67,11 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
+
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return new RedirectResult("/Identity/Account/Login");
             }
 
             if (!ModelState.IsValid)
@@ -76,14 +80,16 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
+            if (user.UserName != Input.DisplayName)
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
+                user.UserName = Input.DisplayName;
+                var userUpdate = await _userManager.UpdateAsync(user);
+                if (!userUpdate.Succeeded)
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
-                    return RedirectToPage();
+                    foreach(var error in userUpdate.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
                 }
             }
 

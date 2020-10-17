@@ -1,0 +1,43 @@
+﻿@model List<mtgdm.ViewComponents.ShowpieceListViewComponent.ShowpiecesWithUser>
+
+    <div class="columns is-multiline">
+        @if (Model?.Count > 0)
+        {
+            foreach (var showpiece in Model)
+            {
+                <div class="column is-4">
+                    <div class="card equal-height">
+                        <a href="@Url.Page("/Showpiece/View",new { ShowpieceID = @showpiece.Showpiece.ShowpieceID, ReturnURL = showpiece.ReturnURL })">
+                            <div class="card-image">
+                                <figure class="image is-2by3">
+                                    <img src="@showpiece.Showpiece.URL" alt="@showpiece.Showpiece.Title">
+                                </figure>
+                            </div>
+                        </a>
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-content">
+                                    <p class="title is-4">@showpiece.Showpiece.Title</p>
+                                    <p class="subtitle is-6">
+                                        <a href="@Url.Page("/User/Index",new { userID = @showpiece.Showpiece.UserID })">@showpiece.Username</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="column">
+                <div class="field notification is-info is-light">
+                    <span class="icon is-left">
+                        <i class="fas fa-info-circle fa-lg" title="No records"></i>
+                    </span>
+                    <span>There are no showpieces to display</span>
+                </div>
+            </div>
+
+        }
+    </div>

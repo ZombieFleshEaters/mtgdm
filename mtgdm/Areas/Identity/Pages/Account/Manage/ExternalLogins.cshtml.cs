@@ -21,7 +21,6 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
             _userManager = userManager;
             _signInManager = signInManager;
         }
-
         public IList<UserLoginInfo> CurrentLogins { get; set; }
 
         public IList<AuthenticationScheme> OtherLogins { get; set; }
@@ -36,7 +35,7 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID 'user.Id'.");
+                return new RedirectResult("/Identity/Account/Login");
             }
 
             CurrentLogins = await _userManager.GetLoginsAsync(user);
@@ -52,18 +51,26 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID 'user.Id'.");
+                return new RedirectResult("/Identity/Account/Login");
             }
 
             var result = await _userManager.RemoveLoginAsync(user, loginProvider, providerKey);
             if (!result.Succeeded)
             {
-                StatusMessage = "The external login was not removed.";
-                return RedirectToPage();
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+                CurrentLogins = await _userManager.GetLoginsAsync(user);
+                OtherLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync())
+                    .Where(auth => CurrentLogins.All(ul => auth.Name != ul.LoginProvider))
+                    .ToList();
+                ShowRemoveButton = user.PasswordHash != null || CurrentLogins.Count > 1;
+                return Page();
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "The external login was removed.";
+            StatusMessage = "The external login was removed";
             return RedirectToPage();
         }
 
@@ -83,7 +90,7 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID 'user.Id'.");
+                return new RedirectResult("/Identity/Account/Login");
             }
 
             var info = await _signInManager.GetExternalLoginInfoAsync(user.Id);
@@ -95,8 +102,16 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
             var result = await _userManager.AddLoginAsync(user, info);
             if (!result.Succeeded)
             {
-                StatusMessage = "The external login was not added. External logins can only be associated with one account.";
-                return RedirectToPage();
+                foreach(var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+                CurrentLogins = await _userManager.GetLoginsAsync(user);
+                OtherLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync())
+                    .Where(auth => CurrentLogins.All(ul => auth.Name != ul.LoginProvider))
+                    .ToList();
+                ShowRemoveButton = user.PasswordHash != null || CurrentLogins.Count > 1;
+                return Page();
             }
 
             // Clear the existing external cookie to ensure a clean login process

@@ -25,7 +25,7 @@ namespace mtgdm.ConfigurationProvider
 
             using (var dbContext = new ApplicationDbContext(builder.Options))
             {
-                Data = dbContext.SystemValues.ToDictionary(c => c.Key, c => c.Value);
+                Data = dbContext.SystemValue.ToDictionary(c => c.Key, c => c.Value);
             }
         }
     }

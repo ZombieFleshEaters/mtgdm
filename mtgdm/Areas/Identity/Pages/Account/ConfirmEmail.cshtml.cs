@@ -34,7 +34,7 @@ namespace mtgdm.Areas.Identity.Pages.Account
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{userId}'.");
+                return new RedirectResult("/Identity/Account/Login");
             }
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));

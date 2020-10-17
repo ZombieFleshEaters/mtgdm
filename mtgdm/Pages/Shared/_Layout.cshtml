@@ -1,86 +1,150 @@
-﻿
-    <style type="text/css" media="screen">
-        body {
-            display: flex;
-            min-height: 100vh;
-            flex-direction: column;
-        }
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+<!--This HAS to be here an not in CSS. Don't get clever, or the main page hero will not render-->
+<style>
+    body {
+        display: flex;
+        min-height: 100vh;
+        flex-direction: column;
+    }
 
-        #wrapper {
-            flex: 1;
-        }
-    </style>
+    #wrapper {
+        flex: 1;
+    }
+</style>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - mtgdm</title>
+    <meta name="Description" content="A gallery of movie posters and box art that doesn't exist.">
+    <meta property="og:site_name" content="Make this god damn movie" />
+
+    @if (ViewData["ogp.Image"] != null)
+    {
+        <meta property="og:image" content="@ViewData["ogp.Image"]" />
+        <meta property="og:image:type" content="image/png" />
+    }
+    else
+    {
+        <meta property="og:image" content="https://s3-ap-southeast-2.amazonaws.com/img.mtgdm/layout/mtgdm_email_banner.png" />
+        <meta property="og:image:type" content="image/png" />
+    }
+
+    @if (ViewData["ogp.FullURL"] != null)
+    {
+        <meta property="og:url" content="@ViewData["ogp.FullURL"]" />
+    }
+
+    @if (ViewData["ogp.Title"] != null)
+    {
+        <meta property="og:title" content="@ViewData["ogp.Title"]" />
+        <meta property="og:type" content="video.movie" />
+    }
+
+    @if (ViewData["ogp.Description"] != null)
+    {
+        <meta property="og:description" content="@ViewData["ogp.Description"]" />
+    }
+    <title>mtgdm - @ViewData["Title"]</title>
+
     <link rel="stylesheet" href="~/css/bulmaswatch.min.css" />
+    <link rel="stylesheet" href="~/lib/@Html.Raw("@")creativebulma/bulma-divider/dist/bulma-divider.min.css" />
+    <link rel="stylesheet" href="~/lib/@Html.Raw("@")creativebulma/bulma-tagsinput/dist/css/bulma-tagsinput.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/star-rating-svg/src/css/star-rating-svg.css">
     <link rel="stylesheet" href="~/css/site.css" />
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=@Configuration["Google.Analytics.TrackingID"]"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', '@Configuration["Google.Analytics.TrackingID"]');
+    </script>
 </head>
 
 <body class="has-navbar-fixed-top">
     <div id="wrapper">
+        <nav class="navbar is-dark is-fixed-top" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
 
-        <form id="logoutForm" class="navbar-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                <a class="navbar-item" asp-page="/index">
+                    <img src="https://dpwif1tvejv9j.cloudfront.net/mtgdm_logo.png" alt="MTGDM" width="112" height="28">
+                </a>
 
-            <nav class="navbar is-dark is-fixed-top" role="navigation" aria-label="main navigation">
-                <div class="navbar-brand">
+                <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navBarBurger">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
 
-                    <a class="navbar-item" asp-page="/index">
-                        <img src="http://dpwif1tvejv9j.cloudfront.net/mtgdm_logo.png" alt="MTGDM" width="112" height="28">
+            <div id="navBarBurger" class="navbar-menu is-dark">
+                <div class="navbar-start">
+                    <a class="navbar-item" asp-page="/Showpiece/List">
+                        <span class="icon">
+                            <i class="fas fa-film fa-lg fa-fw"></i>
+                        </span>
+                        <span>&nbsp; Gallery</span>
                     </a>
 
-                    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                        <span aria-hidden="true"></span>
-                        <span aria-hidden="true"></span>
-                        <span aria-hidden="true"></span>
-                    </a>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a class="navbar-item" asp-page="/User/Index" asp-route-UserID="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value">
+                            <span class="icon is-small">
+                                <i class="fas fa-user fa-lg"></i>
+                            </span>
+                            <span>&nbsp; My profile</span>
+                        </a>
+                    }
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="navbar-item" asp-page="/Admin/Index">
+                            <span class="icon is-small">
+                                <i class="fas fa-user-secret fa-lg"></i>
+                            </span>
+                            <span>&nbsp; Admin</span>
+                        </a>
+                    }
                 </div>
+                <partial name="_LoginPartial" view-data="@ViewData" />
+            </div>
+        </nav>
 
-                <div class="navbar-menu">
-                    <div class="navbar-start">
-                        <a class="navbar-item"><i class="fas fa-crosshairs"></i>&nbsp;Home</a>
-                        <a class="navbar-item" asp-page="/Upload">Upload</a>
-                        <a class="navbar-item" asp-page="/UploadConfirm">Confirm</a>
-                        <a class="navbar-item" asp-page="/Test">Test</a>
-                        <div class="navbar-item has-dropdown is-hoverable">
-                            <a class="navbar-link">More</a>
+        @if (ViewData.ContainsKey("ReturnURL") && ViewData["ReturnURL"].ToString() == "/")
+        {
+            <partial name="_CookieConsentPartial" />
+            //Render index page without container
+            @RenderBody()
+        }
+        else
+        {
 
-                            <div class="navbar-dropdown">
-                                <a class="navbar-item">About</a>
-                                <a class="navbar-item">Jobs</a>
-                                <a class="navbar-item">Contact</a>
-                                <hr class="navbar-divider">
-                                <a class="navbar-item">Report an issue</a>
-                            </div>
+            //Render all pages within a container
+            <section id="section-main" class="section">
+                <div class="container">
+                    <partial name="_CookieConsentPartial" />
+                    <div class="columns is-centered">
+                        <div class="column is-10">
+                            @RenderBody()
                         </div>
                     </div>
-
-                    <partial name="_LoginPartial" />
-
                 </div>
-            </nav>
-        </form>
-
-        <div class="content">
-            @RenderBody()
-        </div>
+            </section>
+        }
     </div>
-    <footer class="footer">
-        <div class="content has-text-centered">
-            <div>
-                <strong>Bulma</strong> by <a href="https://jgthms.com">Jeremy Thomas</a>. The source code is licensed
-                <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
-                is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
-            </div>
-        </div>
-    </footer>
+
+    <partial name="_FooterPartial" />
 
     <script src="https://kit.fontawesome.com/16808ca666.js" crossorigin="anonymous"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/star-rating-svg/src/jquery.star-rating-svg.js" asp-append-version="true"></script>
+    <script src="~/lib/@Html.Raw("@")creativebulma/bulma-tagsinput/dist/js/bulma-tagsinput.min.js"></script>
+    <script src="~/lib/jquery.blockUI/jquery.blockUI.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)

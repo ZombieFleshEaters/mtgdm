@@ -3,8 +3,16 @@
 @{
     ViewData["Title"] = "Access denied";
 }
-
-<header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">You do not have access to this resource.</p>
-</header>
+    <section class="section">
+        <div class="columns is-centered">
+            <div class="column is-5">
+                <div class="title is-5 has-text-centered">@ViewData["Title"]</div>
+                <div class="field notification is-danger is-light">
+                    <span class="icon is-left">
+                        <i class="fas fa-exclamation-triangle" title="Warning"></i>
+                    </span>
+                    <span><strong>You do not have access to this resource.</strong></span>
+                </div>
+            </div>
+        </div>
+    </section>

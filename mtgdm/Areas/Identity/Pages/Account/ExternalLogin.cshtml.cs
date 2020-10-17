@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using mtgdm.Services;
+using mtgdm.Views.Emails.Callback;
 
 namespace mtgdm.Areas.Identity.Pages.Account
 {
@@ -23,17 +25,18 @@ namespace mtgdm.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
-
-        public ExternalLoginModel(
-            SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager,
-            ILogger<ExternalLoginModel> logger,
-            IEmailSender emailSender)
+        private readonly IRazorViewToStringRenderer _razorViewToStringRenderer;
+        public ExternalLoginModel(SignInManager<IdentityUser> signInManager,
+                                  UserManager<IdentityUser> userManager,
+                                  ILogger<ExternalLoginModel> logger,
+                                  IEmailSender emailSender,
+                                  IRazorViewToStringRenderer razorViewToStringRenderer)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
             _emailSender = emailSender;
+            _razorViewToStringRenderer = razorViewToStringRenderer;
         }
 
         [BindProperty]
@@ -49,7 +52,12 @@ namespace mtgdm.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
+            [Display(Name = "Display name")]
+            public string DisplayName { get; set; }
+
+            [Required]
             [EmailAddress]
+            [Display(Name="Email")]
             public string Email { get; set; }
         }
 
@@ -121,7 +129,7 @@ namespace mtgdm.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
+                var user = new IdentityUser { UserName = Input.DisplayName, Email = Input.Email };
 
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
@@ -134,14 +142,14 @@ namespace mtgdm.Areas.Identity.Pages.Account
                         var userId = await _userManager.GetUserIdAsync(user);
                         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                        var callbackUrl = Url.Page(
-                            "/Account/ConfirmEmail",
-                            pageHandler: null,
-                            values: new { area = "Identity", userId = userId, code = code },
-                            protocol: Request.Scheme);
+                        var callbackUrl = Url.Page("/Account/ConfirmEmail",
+                                                   pageHandler: null,
+                                                   values: new { area = "Identity", userId = userId, code = code },
+                                                   protocol: Request.Scheme);
 
-                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                        var emailCallback = new EmailCallbackViewModel(callbackUrl);
+                        string body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/ConfirmAccountEmail.cshtml", emailCallback);
+                        await _emailSender.SendEmailAsync(Input.Email, "MTGDM - Confirm your email", body);
 
                         // If account confirmation is required, we need to show the link if we don't have a real email sender
                         if (_userManager.Options.SignIn.RequireConfirmedAccount)

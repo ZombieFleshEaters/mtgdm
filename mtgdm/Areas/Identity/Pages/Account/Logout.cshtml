@@ -4,15 +4,22 @@
     ViewData["Title"] = "Log out";
 }
 
-    <section class="section">
-        @*<h1 class="title has-text-centered">@ViewData["Title"]</h1>*@
-        <div class="columns">
-            <div class="column is-4 is-offset-4 box">
-                <div class="notification is-info">
-                    You have successfully logged out.
+<section class="section">
+    <form method="post">
+        <h1 class="title has-text-centered">@ViewData["Title"]</h1>
+        <div class="columns is-centered">
+            <div class="column is-6 box">
+                <div class="field notification is-success is-light">
+                    <span class="icon is-left">
+                        <i class="fas fa-check" title="Success"></i>
+                    </span>
+                    <span>You have successfully logged out.</span>
                 </div>
-                <a asp-page="/Index">Go home</a>
+                <a class="button is-primary" asp-page="./Login">
+                    <span>Continue to log in</span>
+                </a>
             </div>
         </div>
-        
-    </section>
+    </form>
+</section>
+

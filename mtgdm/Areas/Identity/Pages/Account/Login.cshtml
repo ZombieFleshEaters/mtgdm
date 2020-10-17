@@ -4,76 +4,76 @@
 @{
     ViewData["Title"] = "Log in";
 }
-
-
-
-<section class="section">
-    <div>
+    <form class="form-is-clean" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
         <h1 class="title has-text-centered">@ViewData["Title"]</h1>
-        <div class="columns">
-            <div class="column is-4 is-offset-4 box">
+        <div class="columns is-centered">
+            <div class="column is-6">
                 @{
                     if ((Model.ExternalLogins?.Count ?? 0) > 0)
                     {
-                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                            <div class="buttons">
 
-                                @foreach (var provider in Model.ExternalLogins)
+                        <div class="buttons">
+
+                            @foreach (var provider in Model.ExternalLogins)
+                            {
+                                @if (provider.Name == "Google")
                                 {
-                                    @if (provider.Name == "Google")
-                                    {
-                                        <button id="signin-google" class="button is-large is-fullwidth" type="submit" name="provider" value="@provider.Name" title="Sign in with you @provider.DisplayName account">
-                                            <span class="icon has-background-white">
-                                                <svg aria-hidden="true" class="native svg-icon iconGoogle" width="30" height="30" viewBox="0 0 18 18"><path d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z" fill="#4285F4"></path><path d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z" fill="#34A853"></path><path d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z" fill="#FBBC05"></path><path d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.3z" fill="#EA4335"></path></svg>
-                                            </span>
-                                            <span>
-                                                Sign in with @provider.DisplayName
-                                            </span>
-                                        </button>
-                                    }
-                                    @if (provider.Name == "Facebook")
-                                    {
-                                        <button id="signin-facebook" class="button is-large is-fullwidth" type="submit" name="provider" value="@provider.Name" title="Sign in with your @provider.DisplayName account">
-                                            <span class="icon is-large">
-                                                <i class="fab fa-facebook fa-lg" title="Facebook"></i>
-                                            </span>
-                                            <span>Sign in with @provider.DisplayName</span>
-                                        </button>
-                                    }
+                                    <button id="signin-google" class="button is-large is-fullwidth is-google" type="submit" name="provider" value="@provider.Name" title="Log in with you @provider.DisplayName account">
+                                        <span class="icon has-background-white" title="Google">
+                                            <svg aria-hidden="true" class="native svg-icon iconGoogle" width="30" height="30" viewBox="0 0 18 18"><path d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z" fill="#4285F4"></path><path d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z" fill="#34A853"></path><path d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z" fill="#FBBC05"></path><path d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.3z" fill="#EA4335"></path></svg>
+                                        </span>
+                                        <span>
+                                            Log in with @provider.DisplayName
+                                        </span>
+                                    </button>
                                 }
-                            </div>
-                        </form>
+                                @if (provider.Name == "Facebook")
+                                {
+                                    <button id="signin-facebook" class="button is-large is-fullwidth is-facebook" type="submit" name="provider" value="@provider.Name" title="Sign in with your @provider.DisplayName account">
+                                        <span class="icon is-large">
+                                            <i class="fab fa-facebook fa-lg" title="Facebook"></i>
+                                        </span>
+                                        <span>Log in with @provider.DisplayName</span>
+                                    </button>
+                                }
+                            }
+                        </div>
                     }
                 }
             </div>
         </div>
+    </form>
+
+    <div class="columns is-centered">
+        <div class="column is-6">
+            <div class="divider">OR</div>
+        </div>
     </div>
 
-
-
-
-
     <form id="account" method="post">
-        <div class="columns">
-            <div class="column is-4 is-offset-4 box">
+        <div class="columns is-centered">
+            <div class="column is-6 box">
                 <div class="field has-text-centered">
-                    <label class="label is-size-4">MTGDM</label>
+                    <label class="label is-size-4">Make this god damn movie</label>
                 </div>
+                <div asp-validation-summary="ModelOnly" class="field notification is-danger is-light"></div>
+
+
                 <div class="field">
                     <div class="control has-icons-left has-icons-right">
-                        <input class="input" asp-for="Input.Email" type="email" placeholder="Email">
+                        <input class="input" asp-for="Input.Username" placeholder="Username" autocomplete="off">
                         <span class="icon is-small is-left">
-                            <i class="fas fa-envelope"></i>
+                            <i class="fas fa-user" title="Username"></i>
                         </span>
                     </div>
-                    <span class="help is-danger" asp-validation-for="Input.Email"></span>
+                    <span class="help is-danger" asp-validation-for="Input.Username"></span>
                 </div>
 
                 <div class="field">
                     <div class="control has-icons-left">
-                        <input class="input" asp-for="Input.Password" type="password" placeholder="Password">
-                        <span class="icon is-small is-left">
-                            <i class="fas fa-lock"></i>
+                        <input class="input" asp-for="Input.Password" type="password" placeholder="Password" autocomplete="off">
+                        <span class="icon is-small is-left" title="Password">
+                            <i class="fas fa-lock" title="Password"></i>
                         </span>
                     </div>
                     <span class="help is-danger" asp-validation-for="Input.Password"></span>
@@ -84,20 +84,24 @@
                         @Html.DisplayNameFor(m => m.Input.RememberMe)
                     </label>
                 </div>
-
+                <div class="field">
+                    <p>
+                        <a class="" asp-page="./ForgotPassword">
+                            Forgot your password?
+                        </a>
+                    </p>
+                </div>
                 <div class="buttons">
-                    <button class="button is-success" type="submit">
+                    <button class="button is-primary" type="submit">
                         <span class="icon"><i class="fas fa-sign-in-alt"></i></span><span>Log in</span>
                     </button>
                     <a class="button" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">
                         <span class="icon"><i class="fas fa-user-plus"></i></span><span>Register</span>
                     </a>
-                    <a class="button" asp-page="./ForgotPassword">Forgot password?</a>
                 </div>
             </div>
         </div>
     </form>
-</section>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

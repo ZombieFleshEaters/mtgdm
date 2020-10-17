@@ -1,0 +1,217 @@
+﻿@page
+@model mtgdm.Areas.Identity.Pages.Showpiece.ViewModel
+@{
+
+    ViewData["Title"] = @Model.Showpiece.Title;
+    ViewData["ReturnURL"] = Url.Page("/Showpiece/View", new { Model.Showpiece.ShowpieceID });
+
+    //Facebook twitter social media hints, Facebook Graph Metadata: https://developers.facebook.com/tools/debug/
+    ViewData["ogp.Title"] = @Model.Showpiece.Title;
+    if (!string.IsNullOrEmpty(@Model.Showpiece.Synopsis))
+        ViewData["ogp.Description"] = @Model.Showpiece.Synopsis;
+
+    ViewData["ogp.Image"] =  @Model.Showpiece.URL;
+    ViewData["ogp.FullURL"] = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, ViewData["ReturnURL"]);
+
+    var publishedIcon = (Model.Showpiece.Published) ? "far fa-eye" : "fas fa-eye-slash";
+    var publishedText = (Model.Showpiece.Published) ? "Published" : "Unpublished";
+    var publishedNotificationClass = (Model.Showpiece.Published) ? "is-success" : "is-warning";
+    var publishedButtonIcon = (Model.Showpiece.Published) ? "fas fa-eye-slash" : "far fa-eye";
+    var publishedButtonText = (Model.Showpiece.Published) ? "Unpublish" : "Publish";
+    var ratingTitle = (Model.RatingDisabled) ? "Please log in to rate" : "Rating";
+}
+    <div class="columns is-vertical">
+        <div class="column">
+            <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+                <ul>
+                    @if (Model.ReturnURL != null && Model.ReturnURL.StartsWith("/User?UserID", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <li><a asp-page="/Showpiece/List" title="View gallery">Gallery</a></li>
+                        <li><a asp-page="/User/Index" asp-route-UserID="@Model.Showpiece.UserID">Profile</a></li>
+                    }
+                    else
+                    {
+                        <li><a asp-page="@Model.ReturnURL">Gallery</a></li>
+                    }
+                    <li class="is-active"><a asp-page="/Showpice/View" asp-route-ShowpieceID="@Model.Showpiece.ShowpieceID">@Model.Showpiece.Title</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="column">
+                <div class="level">
+                    <div class="level-left"></div>
+                    <div class="level-right">
+
+                        <div class="buttons">
+                            <a asp-page="/Showpiece/Edit" asp-route-ShowpieceID="@Model.Showpiece.ShowpieceID" class="button is-small is-rounded is-primary">
+                                <span class="icon is-large">
+                                    <i class="fas fa-edit fa-lg"></i>
+                                </span>
+                                <span>Edit</span>
+                            </a>
+                            <a asp-page="/Showpiece/Delete" asp-route-ShowpieceID="@Model.Showpiece.ShowpieceID" class="button is-small is-rounded is-danger is-light">
+                                <span class="icon is-large">
+                                    <i class="fas fa-trash-alt fa-lg"></i>
+                                </span>
+                                <span>Delete</span>
+                            </a>
+                            <form class="form-is-clean" asp-page="/Showpiece/Publish" method="post" asp-route-ShowpieceID="@Model.Showpiece.ShowpieceID">
+                                <button type="submit" class="button is-primary is-rounded is-small">
+                                    <span class="icon is-large">
+                                        <i class="@publishedButtonIcon fa-lg"></i>
+                                    </span>
+                                    <span>@publishedButtonText</span>
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+
+<div class="columns">
+    <div class="column is-7">
+        <div class="box">
+            <figure class="image showpiece-image is-2by3">
+                <img src="@Model.Showpiece.URL" title="@Model.Showpiece.Title" />
+            </figure>
+        </div>
+    </div>
+
+    <div class="column is-5">
+        <div class="box">
+            <div class="field right-left">
+                <div class="mb-2">
+                    <p class="title is-5">
+                        @Model.Showpiece.Title
+                    </p>
+                    <p class="subtitle is-7">By: <a asp-page="/User/Index" asp-route-UserID="@Model.Showpiece.UserID">@Model.Username</a></p>
+                </div>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div>
+                        <span class="tag @publishedNotificationClass is-light is-small">
+                            <span class="icon"><i class="@publishedIcon"></i></span>
+                            <span>@publishedText</span>
+                        </span>
+                    </div>
+                }
+            </div>
+
+            <div class="field">
+                <div class="level is-mobile">
+                    <div class="level-left">
+                        <div class="level-item">
+                            <form class="form-is-clean" id="form_@Model.Showpiece.ShowpieceID.ToString()" method="post" asp-page="/Showpiece/Rating">
+                                <div id="@Model.Showpiece.ShowpieceID.ToString()" class="mtgdm_xyz" title="@ratingTitle"></div>
+                                @Html.Hidden("showpieceID", Model.Showpiece.ShowpieceID.ToString())
+                                @Html.Hidden("disabled", Model.RatingDisabled)
+                                @Html.Hidden("rating", Model.Rating)
+                            </form>
+                        </div>
+                        <div class="level-item">
+                            <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false" title="Share on Twitter">Tweet</a>
+                            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                        </div>
+                        <div class="level-item">
+                            <!-- Load Facebook SDK for JavaScript -->
+                            <div id="fb-root"></div>
+                            <script>
+                                (function (d, s, id) {
+                                    var js, fjs = d.getElementsByTagName(s)[0];
+                                    if (d.getElementById(id)) return;
+                                    js = d.createElement(s); js.id = id;
+                                    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+                                    fjs.parentNode.insertBefore(js, fjs);
+                                }(document, 'script', 'facebook-jssdk'));</script>
+
+                            <!-- Your share button code -->
+                            <div class="fb-share-button"
+                                 data-href="@ViewData["ogp.FullURL"]"
+                                 data-layout="button_count" title="Share on Facebook">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <p>@Model.Showpiece.Synopsis</p>
+            </div>
+
+            <div class="field">
+                <div class="tags tag-font-size">
+                    @if (Model.Genres.Count > 0)
+                    {
+                        @foreach (var genre in Model.Genres)
+                        {
+                            <span class="tag is-normal is-light is-small">@genre.Name</span>
+                        }
+                    }
+                </div>
+            </div>
+           
+        </div>
+
+        <div class="box">
+            @if (Model.Comments.Count > 0)
+            {
+                foreach (var comment in Model.Comments)
+                {
+                    <article class="media">
+                        <div class="media-content">
+                            <div class="content">
+                                <div class="is-size-7">
+                                    <span><a asp-page="/User/Index" asp-route-UserID="@comment.Comment.UserID" title="View profile">@comment.Username</a></span>
+                                    <span> · </span>
+                                    <span title="@comment.Comment.Created.ToString("dddd, dd MMMM yyyy HH:mm:ss")">
+                                        <small>@comment.Comment.Created.ToString("MMM dd")</small>
+                                    </span>
+                                </div>
+                                <small class="showpiece-comment">
+                                    @comment.Comment.Content
+                                </small>
+                            </div>
+                        </div>
+                        @if (comment.CanDelete)
+                        {
+                            <form method="post" asp-page-handler="DeleteComment">
+                                <button class="delete" title="Delete"></button>
+                                @Html.Hidden("showpieceID", comment.Comment.ShowpieceID)
+                                @Html.Hidden("Comment.CommentID", comment.Comment.CommentID)
+                            </form>
+                        }
+                    </article>
+                }
+            }
+            else if(!User.Identity.IsAuthenticated)
+            {
+                <p>No comments yet</p>
+            }
+            @if (User.Identity.IsAuthenticated)
+            {
+                <article class="media">
+                    <div class="media-content">
+                        <form class="form-is-clean" method="post" asp-page-handler="Comment">
+                            <div class="field">
+                                @Html.ValidationMessage("Comment.Length", "", new { @class = "help is-danger" }, "")
+                                <p class="control">
+                                    @Html.TextAreaFor(t => t.Comment.Content, new { @class = "textarea", placeholder = "Add a comment" })
+                                </p>
+                            </div>
+                            <button class="button is-primary">Post comment</button>
+                            @Html.Hidden("showpieceID", Model.Showpiece.ShowpieceID.ToString())
+                        </form>
+                    </div>
+                </article>
+            }
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+﻿@page
+@model mtgdm.Pages.User.IndexModel
+@{
+
+    ViewData["Title"] = "Profile";
+    ViewData["ReturnURL"] = Url.Page("/User/Index", new { userID = @Model.UserID });
+}
+
+<nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+    <ul>
+        <li><a asp-page="/Showpiece/List">Gallery</a></li>
+        <li class="is-active"><a asp-page="/User/Index">@ViewData["Title"]</a></li>
+    </ul>
+</nav>
+
+<div class="columns is-multiline is-mobile has-text-centered">
+    <div class="column is-3-tablet is-6-mobile">
+        <article class="tile is-child box">
+            <p class="title">@Model.Showpieces.LongCount()</p>
+            <p class="subtitle">Showpieces</p>
+        </article>
+    </div>
+    <div class="column is-3-tablet is-6-mobile">
+        <article class="tile is-child box">
+            <p class="title">@Model.AverageRating.ToString("0.0")</p>
+            <p class="subtitle">Average rating</p>
+        </article>
+    </div>
+    <div class="column is-3-tablet is-6-mobile">
+        <article class="tile is-child box">
+            <p class="title">@Model.RatingsGiven</p>
+            <p class="subtitle">Ratings given</p>
+        </article>
+    </div>
+    <div class="column is-3-tablet is-6-mobile">
+        <article class="tile is-child box">
+            <p class="title">@Model.RatingsReceived</p>
+            <p class="subtitle">Ratings received</p>
+        </article>
+    </div>
+</div>
+
+<div class="title is-3">Work from <a asp-page="/User/Index" asp-route-UserID="@Model.UserID">@Model.Username</a></div>
+
+@await Component.InvokeAsync("ShowpieceList", new { UserID=@Model.UserID, SearchTerm="", Sort="", ReturnURL=@Url.Page("/User/Index", new { userID = @Model.UserID }) })

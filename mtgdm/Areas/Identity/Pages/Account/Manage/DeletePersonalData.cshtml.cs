@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using mtgdm.Data;
+using System.Linq;
 
 namespace mtgdm.Areas.Identity.Pages.Account.Manage
 {
@@ -13,15 +16,18 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
+        private readonly ApplicationDbContext _context;
 
         public DeletePersonalDataModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            ILogger<DeletePersonalDataModel> logger)
+            ILogger<DeletePersonalDataModel> logger,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
         }
 
         [BindProperty]
@@ -41,7 +47,7 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return new RedirectResult("/Identity/Account/Login");
             }
 
             RequirePassword = await _userManager.HasPasswordAsync(user);
@@ -53,7 +59,7 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return new RedirectResult("/Identity/Account/Login");
             }
 
             RequirePassword = await _userManager.HasPasswordAsync(user);
@@ -72,6 +78,12 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
             {
                 throw new InvalidOperationException($"Unexpected error occurred deleting user with ID '{userId}'.");
             }
+
+            //Remove all content
+
+            var showpieces = await _context.Showpiece.Where(w => user.Id == w.UserID.ToString()).ToListAsync();
+            _context.RemoveRange(showpieces);
+            await _context.SaveChangesAsync();
 
             await _signInManager.SignOutAsync();
 

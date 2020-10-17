@@ -1,0 +1,71 @@
+﻿@page
+@model mtgdm.Areas.Identity.Pages.Showpiece.ListModel
+@{
+    ViewData["Title"] = "Gallery";
+    ViewData["ReturnURL"] = Url.Page("/Showpiece/List");
+}
+
+<div class="columns is-vertical">
+    <div class="column">
+        <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+            <ul>
+                <li class="is-active">@ViewData["Title"]</li>
+            </ul>
+        </nav>
+    </div>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="column">
+            <div class="level">
+                <div class="level-left"></div>
+                <div class="level-right">
+
+                    <div class="buttons">
+                        <a href=@Url.Page("/Showpiece/Add") class="button is-primary is-small is-rounded">
+                            <span class="icon">
+                                <i class="fas fa-plus fa-lg"></i>
+                            </span>
+                            <span>Add showpiece</span>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="column box">
+    <form class="form-is-clean" method="get">
+        <div class="field is-grouped is-grouped-multiline is-right">
+            <div class="control is-expanded has-icons-left">
+                <input class="input" type="text" placeholder="Search" asp-for="SearchTerm" autocomplete="off" />
+                <span class="icon is-small is-left">
+                    <i class="fas fa-search"></i>
+                </span>
+            </div>
+            <div class="control">
+                <div class="select">
+                    <select name="Sort" asp-for="Sort">
+                        <option value="" disabled selected>Sort by</option>
+                        <option value="RatedAsc">Rating - low to high</option>
+                        <option value="RatedDesc">Rating - high to low</option>
+                        <option value="CreatedAsc">Created - old to new</option>
+                        <option value="CreatedDesc">Created - new to old</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control">
+                <button type="submit" class="button is-primary">
+                    <span class="icon is-small">
+                        <i class="fas fa-search"></i>
+                    </span>
+                    <span>Search</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@await Component.InvokeAsync("ShowpieceList", new { @Model.SearchTerm, @Model.Sort, ReturnURL = "/Showpiece/List" })
