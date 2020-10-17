@@ -10,5 +10,5 @@ This project is simple Lorem ipsum dolor generator.
 ## Credits
 Project is created with:
 * https://github.com/nashio/star-rating-svg/
-* tedgoas.github.io/cerberus
+* https://tedgoas.github.io/Cerberus/
 * https://www.nuget.org/packages/Tinify
