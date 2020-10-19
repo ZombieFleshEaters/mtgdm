@@ -1,11 +1,11 @@
-# mtgdm
+# Make this god damn movie
  
 
 
 
 
 ## General info
-This project is simple Lorem ipsum dolor generator.
+A project site to display movie posters and box art that do not exist.
 	
 ## Credits
 Project is created with:
