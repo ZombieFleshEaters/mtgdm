@@ -1,6 +1,8 @@
-﻿@page
+﻿@page "/admin/system-values/edit/{SystemValueKey}"
 @model mtgdm.Pages.Admin.SystemValues.EditModel
 @{
+    ViewData["Title"] = $"System value edit";
+    ViewData["ReturnURL"] = Url.Page("/Admin/SystemValues/Edit", new { SystemValueKey = @Model.SystemValue.Key });
 }
 
 

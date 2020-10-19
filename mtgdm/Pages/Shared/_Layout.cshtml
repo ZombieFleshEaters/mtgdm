@@ -9,12 +9,12 @@
     }
 
     #wrapper {
-        flex: 1;
+        flex: 1 0 0;
     }
 </style>
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -115,7 +115,7 @@
             </div>
         </nav>
 
-        @if (ViewData.ContainsKey("ReturnURL") && ViewData["ReturnURL"].ToString() == "/")
+        @if (ViewData.ContainsKey("ReturnURL") && ViewData["ReturnURL"] != null && ViewData["ReturnURL"].ToString() == "/")
         {
             <partial name="_CookieConsentPartial" />
             //Render index page without container

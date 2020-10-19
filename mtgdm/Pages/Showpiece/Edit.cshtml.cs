@@ -107,7 +107,9 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
                 return new RedirectToPageResult("/Showpiece/List");
             }
 
-            if(await _context.Showpiece.AnyAsync(a => a.Title.Equals(Showpiece.Title, StringComparison.OrdinalIgnoreCase) && a.ShowpieceID != Showpiece.ShowpieceID))
+            Showpiece.Slug = mtgdm.Helpers.Slugify.ToUrlSlug(Showpiece.Title);
+
+            if(await _context.Showpiece.AnyAsync(a => a.Slug.Equals(Showpiece.Slug, StringComparison.OrdinalIgnoreCase) && a.ShowpieceID != Showpiece.ShowpieceID))
             {
                 GenreChoices = await _context.Genre.Select(s => new SelectListItem
                 {
@@ -133,7 +135,7 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
             _context.Showpiece.Update(Showpiece);
             await _context.SaveChangesAsync();
 
-            return new RedirectToPageResult("/Showpiece/View", new { Showpiece.ShowpieceID });
+            return new RedirectToPageResult("/Showpiece/View", new { name = Showpiece.Slug });
         }
     }
 }

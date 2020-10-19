@@ -45,7 +45,7 @@ namespace mtgdm.Pages.Showpiece
             _context.Showpiece.Update(showpiece);
             await _context.SaveChangesAsync();
 
-            return new RedirectToPageResult("/Showpiece/View", new { showpiece.ShowpieceID });
+            return new RedirectToPageResult("/Showpiece/View", new { name = showpiece.Slug });
         }
     }
 }

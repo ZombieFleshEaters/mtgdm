@@ -1,6 +1,8 @@
-﻿@page
+﻿@page "/admin/system-values"
 @model mtgdm.Pages.Admin.SystemValues.ListModel
 @{
+    ViewData["Title"] = "System values";
+    ViewData["ReturnURL"] = Url.Page("/Admin/SystemValues/List");
 }
 
 <div class="columns is-vertical">

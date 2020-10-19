@@ -87,13 +87,14 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
 
             var showpieceID = Guid.NewGuid();
             var fileName = showpieceID.ToString() + ".png";
-
-            if(await _context.Showpiece.AnyAsync(a => a.Title.Equals(Showpiece.Title, StringComparison.OrdinalIgnoreCase) && a.ShowpieceID != Showpiece.ShowpieceID ))
+            
+            Showpiece.Slug = mtgdm.Helpers.Slugify.ToUrlSlug(Showpiece.Title);
+            if (await _context.Showpiece.AnyAsync(a => a.Slug.Equals(Showpiece.Slug, StringComparison.OrdinalIgnoreCase) && a.ShowpieceID != Showpiece.ShowpieceID ))
             {
                 ModelState.AddModelError("Validation.Title.IsUsed", $"The title '{Showpiece.Title}' has already been taken");
                 return Page();
             }
-
+                       
             try
             {
                 using var input = new MemoryStream();

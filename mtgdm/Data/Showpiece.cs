@@ -21,6 +21,9 @@ namespace mtgdm.Data
         [StringLength(255, MinimumLength = 3)]
         public string URL { get; set; }
 
+        [StringLength(500, MinimumLength = 1)]
+        public string Slug { get; set; }
+
         [Display(Name="Synopsis (optional)", Prompt ="Synopsis (optional)")]
         [StringLength(2000, MinimumLength = 3)]
         public string Synopsis { get; set; }

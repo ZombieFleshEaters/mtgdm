@@ -1,5 +1,4 @@
 ﻿
-
 #mtgdm_subtitle {
     color: rgba(255,255,255,.70);
 }
@@ -49,7 +48,7 @@
     flex: auto;
 }
 
-.showpiece-comment {
+.has-line-breaks {
     white-space: pre-line;
 }
 .footer {

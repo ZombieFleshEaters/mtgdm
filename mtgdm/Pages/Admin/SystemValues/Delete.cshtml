@@ -1,6 +1,8 @@
-﻿@page
+﻿@page "/admin/system-values/delete/{SystemValueKey}"
 @model mtgdm.Pages.Admin.SystemValues.DeleteModel
 @{
+    ViewData["Title"] = $"System value delete";
+    ViewData["ReturnURL"] = Url.Page("/Admin/SystemValues/Delete", new { SystemValueKey = @Model.SystemValue.Key });
 }
 
 <nav class="breadcrumb is-medium" aria-label="breadcrumbs">

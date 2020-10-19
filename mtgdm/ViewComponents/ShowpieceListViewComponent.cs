@@ -32,7 +32,7 @@ namespace mtgdm.ViewComponents
                         join user in _context.Users on show.UserID.ToString() equals user.Id
                         join rate in _context.ShowpieceRating on show.ShowpieceID equals rate.ShowpieceID into rt
                         from def in rt.DefaultIfEmpty()
-                        group def by new { user.UserName, show.ShowpieceID, show.Title, show.URL, show.UserID, show.Synopsis, show.Published, show.Created } into g
+                        group def by new { user.UserName, show.ShowpieceID, show.Title, show.URL, show.Slug, show.UserID, show.Synopsis, show.Published, show.Created } into g
                         select new
                         {
                             g.Key.UserName,
@@ -40,6 +40,7 @@ namespace mtgdm.ViewComponents
                             g.Key.Synopsis,
                             g.Key.Title,
                             g.Key.URL,
+                            g.Key.Slug,
                             g.Key.Published,
                             g.Key.UserID,
                             g.Key.Created,
@@ -96,6 +97,7 @@ namespace mtgdm.ViewComponents
                     Published = s.Published,
                     Synopsis = s.Synopsis,
                     Title = s.Title,
+                    Slug = s.Slug,
                     Created = s.Created,
                     UserID = s.UserID,
                     URL = s.URL

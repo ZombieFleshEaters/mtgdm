@@ -30,7 +30,6 @@
 
   <ItemGroup>
     <Folder Include="Data\Database Schemas\" />
-    <Folder Include="Pages\Moderator\" />
   </ItemGroup>
 
 </Project>

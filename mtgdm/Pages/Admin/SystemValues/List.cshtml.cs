@@ -11,7 +11,7 @@ using mtgdm.Data;
 
 namespace mtgdm.Pages.Admin.SystemValues
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class ListModel : PageModel
     {
         private readonly ApplicationDbContext _context;

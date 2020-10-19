@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "/delete/{ShowpieceID}"
 @model mtgdm.Pages.Showpiece.DeleteModel
 @{
     ViewData["Title"] = "Delete showpiece";
@@ -40,7 +40,7 @@
                 </span>
                 <span>Delete this showpiece</span>
             </button>
-            <a asp-page="/Showpiece/View" asp-route-ShowpieceID="@Model.Showpiece.ShowpieceID" class="button is-danger is-light">
+            <a asp-page="/Showpiece/View" asp-route-name="@Model.Showpiece.Slug" class="button is-danger is-light">
                 <span class="icon"><i class="fas fa-times fa-lg"></i></span><span>Cancel</span>
             </a>
         </div>

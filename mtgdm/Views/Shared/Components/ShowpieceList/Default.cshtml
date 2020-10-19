@@ -6,8 +6,8 @@
             foreach (var showpiece in Model)
             {
                 <div class="column is-4">
-                    <div class="card equal-height">
-                        <a href="@Url.Page("/Showpiece/View",new { ShowpieceID = @showpiece.Showpiece.ShowpieceID, ReturnURL = showpiece.ReturnURL })">
+                    <div class="card">
+                        <a href="@Url.Page("/Showpiece/View", new { Name = @showpiece.Showpiece.Slug })">
                             <div class="card-image">
                                 <figure class="image is-2by3">
                                     <img src="@showpiece.Showpiece.URL" alt="@showpiece.Showpiece.Title">

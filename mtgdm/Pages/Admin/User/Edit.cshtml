@@ -1,0 +1,56 @@
+﻿@page "/admin/users/edit/{UserID}"
+@model mtgdm.Pages.Admin.User.EditModel
+@{
+    ViewData["Title"] = "User edit";
+    ViewData["ReturnURL"] = Url.Page("/Admin/User/Edit", new { @Model.UserID });
+}
+
+<div class="columns is-vertical">
+    <div class="column">
+        <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+            <ul>
+                <li><a asp-page="/Admin/User/List">Users</a></li>
+                <li class="is-active"><a asp-page="/Admin/User/Edit" asp-route-UserID="@Model.UserID">Edit</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<form class="form-is-clean" method="post">
+    <div class="column is-8 box">
+
+        <div asp-validation-summary="ModelOnly" class="field notification is-danger is-light"></div>
+        <div class="field">
+            <div class="control has-icons-left has-icons-right">
+                <input class="input" asp-for="@Model.UserEdit.UserName" placeholder="Title" autocomplete="off" disabled>
+                <span class="icon is-large is-left">
+                    <i class="fas fa-key fa-lg" title="User ID"></i>
+                </span>
+            </div>
+            <span class="help is-danger" asp-validation-for="@Model.UserEdit.UserName"></span>
+        </div>
+
+        <div class="field">
+            <div class="control">
+                <div class="select is-primary">
+                    <select data-placeholder="Choose roles" asp-for="@Model.UserRole" asp-items="Model.UserRoles">
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button type="submit" class="button is-primary">
+                <span class="icon"><i class="fas fa-save fa-lg"></i></span><span>Save</span>
+            </button>
+            <a asp-page="/Admin/User/List" class="button is-danger is-light">
+                <span class="icon"><i class="fas fa-times fa-lg"></i></span><span>Cancel</span>
+            </a>
+        </div>
+    </div>
+    @Html.HiddenFor(h => h.UserEdit.ConcurrencyStamp)
+    @Html.HiddenFor(h => h.UserEdit.UserName)
+    @Html.HiddenFor(h => h.UserEdit.Email)
+    @Html.HiddenFor(h => h.UserEdit.EmailConfirmed)
+    @Html.HiddenFor(h => h.UserEdit.Id)
+</form>

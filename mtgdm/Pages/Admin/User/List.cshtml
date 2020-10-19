@@ -1,0 +1,52 @@
+﻿@page "/admin/users"
+@model mtgdm.Pages.Admin.User.ListModel
+@{
+    ViewData["Title"] = "Users";
+    ViewData["ReturnURL"] = Url.Page("/Admin/User/List");
+}
+
+<div class="columns is-vertical">
+    <div class="column">
+        <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+            <ul>
+                <li><a asp-page="/Admin/Index">Admin</a></li>
+                <li class="is-active"><a asp-page="/Admin/User/List">User</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+@if (Model.Users.Count > 0)
+{
+    <table class="table is-striped is-full-width">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(v => user.User.UserName)</td>
+                    <td class="is-hidden-touch">@Html.DisplayFor(v => user.User.Email)</td>
+                    <td class="is-hidden-touch">@Html.DisplayFor(v => user.Role)</td>
+                    <td>
+                        <a asp-page="/Admin/User/Edit" asp-route-UserID="@user.User.Id" class="button is-small is-primary">
+                            <span class="icon"><i class="fas fa-edit"></i></span><span>Edit</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-page="/Admin/User/Delete" asp-route-UserID="@user.User.Id" class="button is-small is-danger is-light">
+                            <span class="icon"><i class="fas fa-trash-alt"></i></span><span>Delete</span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

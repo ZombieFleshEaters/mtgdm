@@ -1,7 +1,6 @@
-﻿@page
+﻿@page "/profile/{UserID}"
 @model mtgdm.Pages.User.IndexModel
 @{
-
     ViewData["Title"] = "Profile";
     ViewData["ReturnURL"] = Url.Page("/User/Index", new { userID = @Model.UserID });
 }
@@ -40,6 +39,6 @@
     </div>
 </div>
 
-<div class="title is-3">Work from <a asp-page="/User/Index" asp-route-UserID="@Model.UserID">@Model.Username</a></div>
+<div class="title is-5">Work from <a asp-page="/User/Index" asp-route-UserID="@Model.UserID">@Model.Username</a></div>
 
 @await Component.InvokeAsync("ShowpieceList", new { UserID=@Model.UserID, SearchTerm="", Sort="", ReturnURL=@Url.Page("/User/Index", new { userID = @Model.UserID }) })

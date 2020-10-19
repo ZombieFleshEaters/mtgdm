@@ -30,12 +30,7 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
         }
 
         [BindProperty(SupportsGet = true)]
-        public string ShowpieceID { get; set; }
-
-        [BindProperty(SupportsGet = true)]
-        public string ReturnURL { get; set; }
-
-
+        public string Name { get; set; }
 
         [BindProperty]
         public mtgdm.Data.Showpiece Showpiece { get; set; }
@@ -61,14 +56,12 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
         [BindProperty]
         public mtgdm.Data.Comment Comment { get; set; }
 
+        [BindProperty]
+        public bool CanEdit { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
-            if (!Guid.TryParse(ShowpieceID, out Guid showpieceID))
-            {
-                return new RedirectToPageResult("/Showpiece/List");
-            }
-
-            Showpiece = await _context.Showpiece.FirstOrDefaultAsync(f => f.ShowpieceID == showpieceID);
+            Showpiece = await _context.Showpiece.FirstOrDefaultAsync(f => f.Slug == Name);
             if (Showpiece == null)
                 return new RedirectToPageResult("/Showpiece/List");
 
@@ -81,7 +74,7 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
                 //Get user-specific rating
                 var userRating = await _context.ShowpieceRating
                                                .AsNoTracking()
-                                               .Where(w => w.UserID == userID && w.ShowpieceID == showpieceID)
+                                               .Where(w => w.UserID == userID && w.ShowpieceID == Showpiece.ShowpieceID)
                                                .AverageAsync(a => (decimal?)a.Rating);
                 Rating = userRating ?? decimal.Zero;
             }
@@ -91,7 +84,7 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
                 //Get average rating
                 var totalRating = await _context.ShowpieceRating
                                                 .AsNoTracking()
-                                                .Where(w => w.ShowpieceID == showpieceID)
+                                                .Where(w => w.ShowpieceID == Showpiece.ShowpieceID)
                                                 .AverageAsync(a => (decimal?)a.Rating);
                 Rating = totalRating ?? decimal.Zero;
             }
@@ -112,7 +105,7 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
                                         g.Name,
                                         g.Normalized
                                     })
-                                    .Where(w => w.ShowpieceID == showpieceID)
+                                    .Where(w => w.ShowpieceID == Showpiece.ShowpieceID)
                                     .Select(s => new Genre()
                                     {
                                         GenreID = s.GenreID,
@@ -122,7 +115,7 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
             //https://stackoverflow.com/questions/41822458/linq-group-by-on-multiple-tables-with-nested-group-by-with-join-and-aggregate
             var query = from comment in _context.Comment
                         join usr in _context.Users on comment.UserID.ToString() equals usr.Id
-                        where comment.ShowpieceID == showpieceID
+                        where comment.ShowpieceID == Showpiece.ShowpieceID
                         orderby comment.Created ascending
                         select new CommentWithUser
                         {
@@ -141,6 +134,15 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
                 var isSameUser = _userManager.GetUserId(User) == comment.Comment.UserID.ToString();
                 comment.CanDelete = isAdmin || isSameUser;
             }
+            var isCurrentAdmin = false;
+            if(User.Identity.IsAuthenticated)
+            {
+                isCurrentAdmin = await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(User), "Admin");
+            }
+            var isCurrentSameUser = _userManager.GetUserId(User) == Showpiece.UserID.ToString();
+
+            CanEdit = isCurrentAdmin || isCurrentSameUser;
+
             return Page();
         }
 
@@ -153,23 +155,27 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
                 return Page();
             }
 
-            if (string.IsNullOrEmpty(ShowpieceID) || !Guid.TryParse(ShowpieceID, out Guid showpieceID))
-            {
-                return new RedirectToPageResult("/Showpice/List");
-            }
+            //if (string.IsNullOrEmpty(ShowpieceID) || !Guid.TryParse(ShowpieceID, out Guid showpieceID))
+            //{
+            //    return new RedirectToPageResult("/Showpice/List");
+            //}
+
+            Showpiece = await _context.Showpiece.FirstOrDefaultAsync(f => f.ShowpieceID == Showpiece.ShowpieceID);
 
             var user = await _userManager.GetUserAsync(User);
             var userId = Guid.Parse(user.Id);
 
             Comment.UserID = userId;
-            Comment.ShowpieceID = showpieceID;
+            Comment.ShowpieceID = Showpiece.ShowpieceID;
             Comment.CommentID = Guid.NewGuid();
             Comment.Created = DateTime.Now;
 
             await _context.Comment.AddAsync(Comment);
             await _context.SaveChangesAsync();
 
-            return new RedirectToPageResult("/Showpiece/View", new { Comment.ShowpieceID });
+
+
+            return new RedirectToPageResult("/Showpiece/View", new { name = Showpiece.Slug });
         }
 
         public async Task<IActionResult> OnPostDeleteCommentAsync()
@@ -180,11 +186,11 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
                 return Page();
             }
 
-            if (string.IsNullOrEmpty(ShowpieceID) || !Guid.TryParse(ShowpieceID, out Guid showpieceID))
-            {
-                await OnGetAsync();
-                return Page();
-            }
+            //if (string.IsNullOrEmpty(ShowpieceID) || !Guid.TryParse(ShowpieceID, out Guid showpieceID))
+            //{
+            //    await OnGetAsync();
+            //    return Page();
+            //}
 
             var comment = await _context.Comment.FirstOrDefaultAsync(f => f.CommentID == Comment.CommentID);
             if (comment == null)
@@ -193,7 +199,7 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
                 return Page();
             }
 
-            var showpiece = await _context.Showpiece.FirstOrDefaultAsync(f => f.ShowpieceID == showpieceID);
+            var showpiece = await _context.Showpiece.FirstOrDefaultAsync(f => f.ShowpieceID == Showpiece.ShowpieceID);
             if (showpiece == null)
             {
                 await OnGetAsync();
@@ -203,7 +209,7 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
             _context.Comment.Remove(comment);
             await _context.SaveChangesAsync();
 
-            return new RedirectToPageResult("/Showpiece/View", new { showpiece.ShowpieceID });
+            return new RedirectToPageResult("/Showpiece/View", new { name = Showpiece.Slug });
         }
 
 

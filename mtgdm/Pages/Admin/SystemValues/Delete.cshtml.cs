@@ -12,8 +12,7 @@ using mtgdm.Data;
 
 namespace mtgdm.Pages.Admin.SystemValues
 {
-
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class DeleteModel : PageModel
     {
         private readonly ApplicationDbContext _context;

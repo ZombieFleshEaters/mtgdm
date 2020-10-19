@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "/edit/{ShowpieceID}"
 @model mtgdm.Areas.Identity.Pages.Showpiece.EditModel
 @{
     ViewData["Title"] = "Edit showpiece";
@@ -40,7 +40,7 @@
             <button type="submit" class="button is-primary">
                 <span class="icon"><i class="fas fa-save fa-lg"></i></span><span>Save</span>
             </button>
-            <a asp-page="/Showpiece/View" asp-route-ShowpieceID="@Model.Showpiece.ShowpieceID" class="button is-danger is-light">
+            <a asp-page="/Showpiece/View" asp-route-name="@Model.Showpiece.Slug" class="button is-danger is-light">
                 <span class="icon"><i class="fas fa-times fa-lg"></i></span><span>Cancel</span>
             </a>
         </div>
