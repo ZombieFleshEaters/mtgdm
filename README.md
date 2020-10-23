@@ -5,6 +5,7 @@ A project site to showcase movie posters and box art that do not exist.
 
 ## Credits
 Project is created with:
+* Bulma - https://bulma.io/
 * Star rating - https://github.com/nashio/star-rating-svg/
 * Email formatting - https://tedgoas.github.io/Cerberus/
 * Image compression - https://www.nuget.org/packages/Tinify
