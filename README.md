@@ -1,12 +1,8 @@
 # Make this god damn movie
- 
-
-
-
 
 ## General info
-A project site to display movie posters and box art that do not exist.
-	
+A project site to showcase movie posters and box art that do not exist.
+
 ## Credits
 Project is created with:
 * Star rating - https://github.com/nashio/star-rating-svg/
