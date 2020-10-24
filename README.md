@@ -1,7 +1,7 @@
 # Make this god damn movie
 
 ## General info
-A project site to showcase movie posters and box art that do not exist.
+A project site to showcase movie posters and box art.
 
 ## Credits
 mtgdm is standing on the shoulders of giants:
