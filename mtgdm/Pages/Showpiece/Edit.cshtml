@@ -1,14 +1,16 @@
-﻿@page "/edit/{ShowpieceID}"
+﻿@page "/edit/{name}"
 @model mtgdm.Areas.Identity.Pages.Showpiece.EditModel
 @{
     ViewData["Title"] = "Edit showpiece";
-    ViewData["ReturnURL"] = Url.Page("/Showpiece/Edit", new { Model.Showpiece.ShowpieceID });
+    ViewData["ReturnURL"] = Url.Page("/Showpiece/Edit", new { Name = Model.Showpiece.Slug });
 }
 
 <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
     <ul>
         <li><a asp-page="/Showpiece/List">Gallery</a></li>
-        <li class="is-active"><a asp-page="/Showpice/Edit" asp-route-ShowpieceID="@Model.Showpiece.ShowpieceID">Edit showpiece</a></li>
+        <li><a asp-page="/User/Index" asp-route-UserID="@Model.Showpiece.UserID">@Model.Username</a></li>
+        <li><a asp-page="/Showpiece/View" asp-route-Name="@Model.Showpiece.Slug">@Model.Showpiece.Title</a></li>
+        <li class="is-active"><a asp-page="/Showpice/Edit" asp-route-ShowpieceID="@Model.Showpiece.ShowpieceID">Edit</a></li>
     </ul>
 </nav>
 
@@ -17,7 +19,7 @@
         <div asp-validation-summary="ModelOnly" class="field notification is-danger is-light"></div>
         <div class="field">
             <div class="control has-icons-left has-icons-right">
-                <input class="input" asp-for="Showpiece.Title" placeholder="@Html.DisplayNameFor(d=>d.Showpiece.Title)" autocomplete="off">
+                <input class="input" asp-for="Showpiece.Title" placeholder="@Html.DisplayNameFor(d=>d.Showpiece.Title)" autocomplete="off" autofocus>
                 <span class="icon is-large is-left">
                     <i class="fas fa-film fa-lg" title="Film title"></i>
                 </span>
@@ -25,6 +27,7 @@
             <span class="help is-danger" asp-validation-for="Showpiece.Title"></span>
             @Html.ValidationMessage("Validation.Title.IsUsed", "", new { @class = "help is-danger" }, "")
         </div>
+
         <div class="field">
             <textarea class="textarea" asp-for="Showpiece.Synopsis" placeholder="@Html.DisplayNameFor(d=>d.Showpiece.Synopsis)"></textarea>
         </div>

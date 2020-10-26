@@ -1,0 +1,46 @@
+﻿@page "/view/{name}/report"
+@model mtgdm.Pages.User.Report.AddModel
+@{
+    ViewData["Title"] = "Add report";
+    ViewData["ReturnURL"] = Url.Page("/User/Report/Add");
+}
+
+<nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+    <ul>
+        <li><a asp-page="/Showpiece/List">Gallery</a></li>
+        <li><a asp-page="/User/Index" asp-route-UserID="@Model.Showpiece.UserID">@Model.Username</a></li>
+        <li><a asp-page="/Showpiece/View" asp-route-Name="@Model.Showpiece.Slug">@Model.Showpiece.Title</a></li>
+        <li class="is-active"><a href="/">Report</a></li>
+    </ul>
+</nav>
+
+<form class="form-is-clean" method="post">
+    <div class="column is-8 box">
+        <div asp-validation-summary="ModelOnly" class="field notification is-danger is-light"></div>
+        <div class="field">
+            <div class="control has-icons-left has-icons-right">
+                <input class="input" asp-for="Showpiece.Title" placeholder="@Html.DisplayNameFor(d=>d.Showpiece.Title)" autocomplete="off" disabled="disabled">
+                <span class="icon is-large is-left">
+                    <i class="fas fa-film fa-lg" title="Film title"></i>
+                </span>
+            </div>
+        </div>
+
+        <div class="field">
+            <textarea class="textarea" asp-for="Report.Comment" placeholder="@Html.DisplayNameFor(d=>d.Report.Comment)" autofocus></textarea>
+            <span class="help is-danger" asp-validation-for="Report.Comment"></span>
+        </div>
+
+        <div class="buttons are-small">
+            <button type="submit" class="button is-primary block-ui">
+                <span class="icon"><i class="fas fa-paper-plane fa-lg"></i></span><span>Send report</span>
+            </button>
+            <a asp-page="/Showpiece/List" class="button is-danger is-light">
+                <span class="icon"><i class="fas fa-times fa-lg"></i></span><span>Cancel</span>
+            </a>
+        </div>
+    </div>
+    @Html.HiddenFor(h => h.Showpiece.Title)
+    @Html.HiddenFor(h => h.Showpiece.ShowpieceID)
+    @Html.Hidden("Name", @Model.Showpiece.Slug)
+</form>

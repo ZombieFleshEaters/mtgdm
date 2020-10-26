@@ -106,7 +106,7 @@ namespace mtgdm.Areas.Identity.Pages.Account.Manage
 
                 var emailCallback = new EmailCallbackViewModel(callbackUrl);
                 string body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/EmailChangeEmail.cshtml", emailCallback);
-                await _emailSender.SendEmailAsync(Input.NewEmail, "MTGDM - Confirm your email", body);
+                await _emailSender.SendEmailAsync(Input.NewEmail, "mtgdm - Confirm your email", body);
 
                 ChangeEmailStatusMessage = "Check your email for a link to change your email address. If it doesn’t appear within a few minutes, check your spam folder.";
                 return RedirectToPage();

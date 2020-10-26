@@ -56,3 +56,28 @@
         </article>
     </div>
 </div>
+
+
+@*@if (Model.Results.Rows.Count > 0)
+{
+    <table class="table is-striped is-fullwidth">
+        <thead>
+            <tr>
+                @foreach (var column in Model.Results.Columns)
+                {
+                    <th>@column</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var value in Model.Results.Rows)
+            {
+            <tr>
+                <td>@value.PagePath.Substring(0,Math.Min(50, value.PagePath.Length))</td>
+                <td>@value.PageViews</td>
+                <td>@value.Vistitors</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}*@

@@ -41,6 +41,10 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "Google.Apis.Analytics.v3": {
+              "target": "Package",
+              "version": "[1.49.0.1679, )"
+            },
             "Microsoft.AspNetCore.Authentication.Facebook": {
               "target": "Package",
               "version": "[3.1.8, )"

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using mtgdm.Data;
@@ -127,12 +128,15 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
             foreach(var comment in Comments)
             {
                 var isAdmin = false;
+                var isMod = false;
                 if(User.Identity.IsAuthenticated)
                 {
-                    isAdmin = await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(User), "Admin");
+                    var userForRole = await _userManager.GetUserAsync(User);
+                    isAdmin = await _userManager.IsInRoleAsync(userForRole, "Admin");
+                    isMod = await _userManager.IsInRoleAsync(userForRole, "Moderator");
                 }
                 var isSameUser = _userManager.GetUserId(User) == comment.Comment.UserID.ToString();
-                comment.CanDelete = isAdmin || isSameUser;
+                comment.CanDelete = isAdmin || isMod || isSameUser;
             }
             var isCurrentAdmin = false;
             if(User.Identity.IsAuthenticated)
@@ -199,8 +203,8 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
                 return Page();
             }
 
-            var showpiece = await _context.Showpiece.FirstOrDefaultAsync(f => f.ShowpieceID == Showpiece.ShowpieceID);
-            if (showpiece == null)
+            Showpiece = await _context.Showpiece.FirstOrDefaultAsync(f => f.ShowpieceID == Showpiece.ShowpieceID);
+            if (Showpiece == null)
             {
                 await OnGetAsync();
                 return Page();

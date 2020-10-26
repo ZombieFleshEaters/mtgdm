@@ -18,13 +18,12 @@
 
 @if (Model.Users.Count > 0)
 {
-    <table class="table is-striped is-full-width">
+    <table class="table is-striped is-fullwidth">
         <thead>
             <tr>
-                <th>Username</th>
+                <th>Genre</th>
                 <th>Email</th>
                 <th>Role</th>
-                <th></th>
                 <th></th>
             </tr>
         </thead>
@@ -36,14 +35,14 @@
                     <td class="is-hidden-touch">@Html.DisplayFor(v => user.User.Email)</td>
                     <td class="is-hidden-touch">@Html.DisplayFor(v => user.Role)</td>
                     <td>
-                        <a asp-page="/Admin/User/Edit" asp-route-UserID="@user.User.Id" class="button is-small is-primary">
-                            <span class="icon"><i class="fas fa-edit"></i></span><span>Edit</span>
-                        </a>
-                    </td>
-                    <td>
-                        <a asp-page="/Admin/User/Delete" asp-route-UserID="@user.User.Id" class="button is-small is-danger is-light">
-                            <span class="icon"><i class="fas fa-trash-alt"></i></span><span>Delete</span>
-                        </a>
+                        <div class="buttons is-pulled-right">
+                            <a asp-page="/Admin/User/Edit" asp-route-UserID="@user.User.Id" class="button is-small is-primary">
+                                <span class="icon"><i class="fas fa-edit"></i></span><span>Edit</span>
+                            </a>
+                            <a asp-page="/Admin/User/Delete" asp-route-UserID="@user.User.Id" class="button is-small is-danger is-light">
+                                <span class="icon"><i class="fas fa-trash-alt"></i></span><span>Delete</span>
+                            </a>
+                        </div>
                     </td>
                 </tr>
             }

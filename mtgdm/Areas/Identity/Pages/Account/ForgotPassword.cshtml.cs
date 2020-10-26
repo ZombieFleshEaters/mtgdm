@@ -60,7 +60,7 @@ namespace mtgdm.Areas.Identity.Pages.Account
 
                 var emailCallback = new EmailCallbackViewModel(callbackUrl);
                 string body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/ForgotPasswordEmail.cshtml", emailCallback);
-                await _emailSender.SendEmailAsync(Input.Email, "MTGDM - Reset password", body);
+                await _emailSender.SendEmailAsync(Input.Email, "mtgdm - Reset password", body);
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

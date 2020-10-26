@@ -107,7 +107,13 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
                 Tinify.Key = _config["Tinify.APIKey"];
 
                 var source = Tinify.FromBuffer(input.ToArray());
-                
+
+                //var head = new Dictionary<string, string>() {
+                //    { "Cache-Control", "max-age=31536000" }
+                //};
+
+                //var jsonHeader = System.Text.Json.JsonSerializer.Serialize(head);
+
                 await source.Store(new
                 {
                     service = "s3",
@@ -121,6 +127,7 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
             {
                 // Verify your API key and account limit.
                 ModelState.AddModelError("", e.Message);
+                return Page();
             }
             catch (ClientException e)
             {
@@ -128,26 +135,29 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
                 {
                     case 415:
                         ModelState.AddModelError("", "File type is not supported");
-                        break;
+                        return Page();
                     default:
                         ModelState.AddModelError("", e.Message);
-                        break;
+                        return Page();
                 }
             }
             catch (ServerException e)
             {
                 // Temporary issue with the Tinify API.
                 ModelState.AddModelError("", e.Message);
+                return Page();
             }
             catch (ConnectionException e)
             {
                 // A network connection error occurred.
                 ModelState.AddModelError("", e.Message);
+                return Page();
             }
             catch (System.Exception e)
             {
                 // Something else went wrong, unrelated to the Tinify API.
                 ModelState.AddModelError("", e.Message);
+                return Page();
             }
 
             if (Showpiece.Synopsis == null)
@@ -155,7 +165,7 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
             Showpiece.ShowpieceID = showpieceID;
             Showpiece.Created = DateTime.Now;
             Showpiece.Published = true;
-            Showpiece.URL = String.Concat(_config["AWS.CloudFront.URL"], fileName);
+            Showpiece.URL = String.Concat(_config["AWS.CloudFront.URL.Resize"], "content/", fileName);
             Showpiece.UserID = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             var genres = Genres.Select(s => new ShowpieceToGenre()
@@ -169,7 +179,7 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
             await _context.Showpiece.AddAsync(Showpiece);
             await _context.SaveChangesAsync();
 
-            return new RedirectToPageResult("/Showpiece/View", new { ShowpieceID = showpieceID, ReturnURL = Url.Page("/User/Index", new { Showpiece.UserID }) });
+            return new RedirectToPageResult("/Showpiece/View", new { name = Showpiece.Slug });
         }
     }
 }

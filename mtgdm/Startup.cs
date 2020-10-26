@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using mtgdm.Services;
+using mtgdm.Helpers;
 
 namespace mtgdm
 {
@@ -43,6 +44,8 @@ namespace mtgdm
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddHostedService<HostedService>();
 
             services.AddDefaultIdentity<IdentityUser>(options =>
                     {
@@ -99,7 +102,8 @@ namespace mtgdm
             }
 
             app.UseHttpsRedirection();
-
+            
+            //RecurringJob.AddOrUpdate(UserStoreBase, Cron.Minutely);
             app.UseMiddleware<ResponseCompressionQualityMiddleware>(new Dictionary<string, double>
             {
                 { "br", 1.0 },

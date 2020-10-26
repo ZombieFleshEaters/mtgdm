@@ -1,4 +1,11 @@
 ﻿@page "/view/{name}"
+
+@using mtgdm.Views.Shared;
+@using Microsoft.Extensions.Configuration
+@using mtgdm.Helpers;
+
+@inject IConfiguration Configuration
+
 @model mtgdm.Areas.Identity.Pages.Showpiece.ViewModel
 @{
 
@@ -10,69 +17,67 @@
     if (!string.IsNullOrEmpty(@Model.Showpiece.Synopsis))
         ViewData["ogp.Description"] = @Model.Showpiece.Synopsis;
 
-    ViewData["ogp.Image"] =  @Model.Showpiece.URL;
-    ViewData["ogp.FullURL"] = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, ViewData["ReturnURL"]);
+    ViewData["ogp.Image"] = @Model.Showpiece.URL;
+    //ViewData["ogp.FullURL"] = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, ViewData["ReturnURL"]);
+    ViewData["ogp.FullURL"] = string.Format("{0}://{1}{2}", Request.Scheme, "mtgdm.com", ViewData["ReturnURL"]);
 
     var publishedIcon = (Model.Showpiece.Published) ? "far fa-eye" : "fas fa-eye-slash";
     var publishedText = (Model.Showpiece.Published) ? "Published" : "Unpublished";
-    var publishedNotificationClass = (Model.Showpiece.Published) ? "is-success" : "is-warning";
+    var publishedClass = (Model.Showpiece.Published) ? "has-text-success" : "has-text-danger";
     var publishedButtonIcon = (Model.Showpiece.Published) ? "fas fa-eye-slash" : "far fa-eye";
     var publishedButtonText = (Model.Showpiece.Published) ? "Unpublish" : "Publish";
     var ratingTitle = (Model.RatingDisabled) ? "Please log in to rate" : "Rating";
 }
-    <div class="columns is-vertical">
+<div class="columns is-vertical">
+    <div class="column">
+        <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+            <ul>
+                <li><a asp-page="/Showpiece/List" title="View gallery">Gallery</a></li>
+                <li><a asp-page="/User/Index" asp-route-UserID="@Model.Showpiece.UserID">@Model.Username</a></li>
+                <li class="is-active"><a asp-page="/Showpiece/View" asp-route-ShowpieceID="@Model.Showpiece.ShowpieceID">@Model.Showpiece.Title</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    @if (Model.CanEdit)
+    {
         <div class="column">
-            <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
-                <ul>
-                    <li><a asp-page="/Showpiece/List" title="View gallery">Gallery</a></li>
-                    <li><a asp-page="/User/Index" asp-route-UserID="@Model.Showpiece.UserID">@Model.Username</a></li>
-                    <li class="is-active"><a asp-page="/Showpice/View" asp-route-ShowpieceID="@Model.Showpiece.ShowpieceID">@Model.Showpiece.Title</a></li>
-                </ul>
-            </nav>
-        </div>
-
-        @if (Model.CanEdit)
-        {
-            <div class="column">
-                <div class="level">
-                    <div class="level-left"></div>
-                    <div class="level-right">
-
-                        <div class="buttons">
-                            <a asp-page="/Showpiece/Edit" asp-route-ShowpieceID="@Model.Showpiece.ShowpieceID" class="button is-small is-rounded is-primary">
+            <div class="level">
+                <div class="level-left"></div>
+                <div class="level-right">
+                    <div class="buttons">
+                        <a asp-page="/Showpiece/Edit" asp-route-Name="@Model.Showpiece.Slug" class="button is-small is-rounded is-primary">
+                            <span class="icon is-large">
+                                <i class="fas fa-edit fa-lg"></i>
+                            </span>
+                            <span>Edit</span>
+                        </a>
+                        <a asp-page="/Showpiece/Delete" asp-route-Name="@Model.Showpiece.Slug" class="button is-small is-rounded is-danger is-light">
+                            <span class="icon is-large">
+                                <i class="fas fa-trash-alt fa-lg"></i>
+                            </span>
+                            <span>Delete</span>
+                        </a>
+                        <form class="form-is-clean" asp-page="/Showpiece/Publish" method="post" asp-route-ShowpieceID="@Model.Showpiece.ShowpieceID">
+                            <button type="submit" class="button is-primary is-rounded is-small">
                                 <span class="icon is-large">
-                                    <i class="fas fa-edit fa-lg"></i>
+                                    <i class="@publishedButtonIcon fa-lg"></i>
                                 </span>
-                                <span>Edit</span>
-                            </a>
-                            <a asp-page="/Showpiece/Delete" asp-route-ShowpieceID="@Model.Showpiece.ShowpieceID" class="button is-small is-rounded is-danger is-light">
-                                <span class="icon is-large">
-                                    <i class="fas fa-trash-alt fa-lg"></i>
-                                </span>
-                                <span>Delete</span>
-                            </a>
-                            <form class="form-is-clean" asp-page="/Showpiece/Publish" method="post" asp-route-ShowpieceID="@Model.Showpiece.ShowpieceID">
-                                <button type="submit" class="button is-primary is-rounded is-small">
-                                    <span class="icon is-large">
-                                        <i class="@publishedButtonIcon fa-lg"></i>
-                                    </span>
-                                    <span>@publishedButtonText</span>
-                                </button>
-                            </form>
-                        </div>
-
+                                <span>@publishedButtonText</span>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
-        }
-
-    </div>
+        </div>
+    }
+</div>
 
 <div class="columns">
     <div class="column is-7">
         <div class="box">
             <figure class="image showpiece-image is-2by3">
-                <img src="@Model.Showpiece.URL" title="@Model.Showpiece.Title" />
+                <partial name="ResponsiveImage" model="new ResponsiveImageViewModel(@Model.Showpiece.URL, @Model.Showpiece.Title, 800)" />
             </figure>
         </div>
     </div>
@@ -82,23 +87,25 @@
             <div class="field right-left">
                 <div class="mb-2">
                     <p class="title is-5">
-                        @Model.Showpiece.Title
+                        <span>@Model.Showpiece.Title</span>
                     </p>
-                    <p class="subtitle is-7">By: 
+                    <p class="subtitle is-7">
+                        By:
                         <a asp-page="/User/Index" asp-route-UserID="@Model.Showpiece.UserID">
-                            @Model.Username
+                            <span>@Model.Username</span>
                         </a>
+                        <span>&nbsp;·&nbsp;</span>
+                        <span title="@Model.Showpiece.Created.ToString("dddd, dd MMMM yyyy HH:mm:ss")">@DateHelper.TimeAgo(@Model.Showpiece.Created)</span>
                     </p>
                 </div>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <div>
-                        <span class="tag @publishedNotificationClass is-light is-small">
-                            <span class="icon"><i class="@publishedIcon"></i></span>
-                            <span>@publishedText</span>
-                        </span>
-                    </div>
-                }
+                <div class="buttons">
+                    <a class="button is-primary" href="https://twitter.com/intent/tweet?url=@ViewData["ogp.FullURL"]&text=Make this god damn movie - @ViewData["ogp.Title"]&hashtag=mtgdm" target="_blank">
+                        <span class="icon is-medium"><i class="fab fa-twitter-square fa-2x"></i></span>
+                    </a>
+                    <a class="button is-primary" href="https://www.facebook.com/dialog/feed?&app_id=@Configuration["Facebook.OAuth.AppID"]&link=@ViewData["ogp.FullURL"]&display=page&quote=@ViewData["ogp.Title"]&hashtag=mtgdm" target="_blank">
+                        <span class="icon is-medium"><i class="fab fa-facebook-square fa-2x"></i></span>
+                    </a>
+                </div>
             </div>
 
             <div class="field">
@@ -112,34 +119,18 @@
                                 @Html.Hidden("rating", Model.Rating)
                             </form>
                         </div>
-                        <div class="level-item">
-                            <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false" title="Share on Twitter">Tweet</a>
-                            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-                        </div>
-                        <div class="level-item">
-                            <!-- Load Facebook SDK for JavaScript -->
-                            <div id="fb-root"></div>
-                            <script>
-                                (function (d, s, id) {
-                                    var js, fjs = d.getElementsByTagName(s)[0];
-                                    if (d.getElementById(id)) return;
-                                    js = d.createElement(s); js.id = id;
-                                    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
-                                    fjs.parentNode.insertBefore(js, fjs);
-                                }(document, 'script', 'facebook-jssdk'));</script>
-
-                            <!-- Your share button code -->
-                            <div class="fb-share-button"
-                                 data-href="@ViewData["ogp.FullURL"]"
-                                 data-layout="button_count" title="Share on Facebook">
-                            </div>
-                        </div>
+                    </div>
+                    <div class="level-right is-size-7">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a asp-page="/User/Report/Add" asp-route-Name="@Model.Showpiece.Slug">Report</a>
+                        }
                     </div>
                 </div>
             </div>
 
             <div class="field">
-                <p class="has-line-breaks">@Model.Showpiece.Synopsis</p>
+                <p class="is-size7 has-line-breaks">@Model.Showpiece.Synopsis</p>
             </div>
 
             <div class="field">
@@ -153,7 +144,6 @@
                     }
                 </div>
             </div>
-           
         </div>
 
         <div class="box">
@@ -166,9 +156,9 @@
                             <div class="content">
                                 <div class="is-size-7">
                                     <span><a asp-page="/User/Index" asp-route-UserID="@comment.Comment.UserID" title="View profile">@comment.Username</a></span>
-                                    <span> · </span>
+                                    <span>&nbsp;·&nbsp;</span>
                                     <span title="@comment.Comment.Created.ToString("dddd, dd MMMM yyyy HH:mm:ss")">
-                                        <small>@comment.Comment.Created.ToString("MMM dd")</small>
+                                        <small>@DateHelper.TimeAgo(@comment.Comment.Created)</small>
                                     </span>
                                 </div>
                                 <small class="has-line-breaks">@comment.Comment.Content</small>
@@ -185,7 +175,7 @@
                     </article>
                 }
             }
-            else if(!User.Identity.IsAuthenticated)
+            else if (!User.Identity.IsAuthenticated)
             {
                 <p>No comments yet</p>
             }

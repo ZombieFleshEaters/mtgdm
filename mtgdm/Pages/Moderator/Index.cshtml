@@ -1,0 +1,46 @@
+﻿@page "/moderator"
+@model mtgdm.Pages.Moderator.IndexModel
+@{
+    ViewData["Title"] = "Moderator";
+    ViewData["ReturnURL"] = Url.Page("/Moderator/Index");
+}
+
+<div class="columns is-vertical">
+    <div class="column">
+        <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+            <ul>
+                <li class="is-active"><a asp-page="/Moderator/Index">Moderator</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="column">
+        <div class="level">
+            <div class="level-left"></div>
+            <div class="level-right">
+                <div class="buttons">
+                    <a class="button is-primary is-small is-rounded" asp-page="/Moderator/Genre/List">
+                        <span class="icon">
+                            <i class="fas fa-tags fa-lg fa-fw"></i>
+                        </span>
+                        <span>&nbsp; Genres</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tile is-ancestor has-text-centered">
+    <div class="tile is-parent">
+        <article class="tile is-child box">
+            <p class="title">@Model.TotalUnresolvedReports</p>
+            <p class="subtitle">Unresolved reports</p>
+        </article>
+    </div>
+    <div class="tile is-parent">
+        <article class="tile is-child box">
+            <p class="title">@Model.TotalResolvedReports</p>
+            <p class="subtitle">Resolved reports</p>
+        </article>
+    </div>
+</div>

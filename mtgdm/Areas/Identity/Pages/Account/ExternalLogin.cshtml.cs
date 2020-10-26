@@ -149,7 +149,7 @@ namespace mtgdm.Areas.Identity.Pages.Account
 
                         var emailCallback = new EmailCallbackViewModel(callbackUrl);
                         string body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/ConfirmAccountEmail.cshtml", emailCallback);
-                        await _emailSender.SendEmailAsync(Input.Email, "MTGDM - Confirm your email", body);
+                        await _emailSender.SendEmailAsync(Input.Email, "mtgdm - Confirm your email", body);
 
                         // If account confirmation is required, we need to show the link if we don't have a real email sender
                         if (_userManager.Options.SignIn.RequireConfirmedAccount)

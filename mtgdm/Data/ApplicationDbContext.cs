@@ -19,5 +19,9 @@ namespace mtgdm.Data
         public virtual DbSet<Genre> Genre { get; set; }
         public virtual DbSet<ShowpieceToGenre> ShowpieceToGenre { get; set; }
         public virtual DbSet<Comment> Comment { get; set; }
+        public virtual DbSet<Report> Report { get; set; }
+        public virtual DbSet<AnalyticsSummary> AnalyticsSummary { get; set; }
+        public virtual DbSet<AnalyticsDetail> AnalyticsDetail { get; set; }
+
     }
 }

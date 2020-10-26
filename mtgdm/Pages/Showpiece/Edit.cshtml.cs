@@ -29,12 +29,13 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
         }
                
         [BindProperty(SupportsGet = true)]
-        public string ShowpieceID { get; set; }
-
-
+        public string Name { get; set; }
 
         [BindProperty]
         public mtgdm.Data.Showpiece Showpiece { get; set; }
+
+        [BindProperty]
+        public string Username { get; set; }
 
         [BindProperty]
         public IEnumerable<string> Genres { get; set; }
@@ -44,12 +45,10 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
 
         public async Task<IActionResult> OnGetAsync()
         {
-            if (!Guid.TryParse(ShowpieceID, out Guid showpieceID))
-            {
+            if(string.IsNullOrEmpty(Name))
                 return new RedirectToPageResult("/Showpiece/List");
-            }
 
-            Showpiece = await _context.Showpiece.FirstOrDefaultAsync(f => f.ShowpieceID == showpieceID);
+            Showpiece = await _context.Showpiece.FirstOrDefaultAsync(f => f.Slug == Name);
             if (Showpiece == null)
                 return new RedirectToPageResult("/Showpiece/List");
 
@@ -71,9 +70,12 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
                                 g.Name,
                                 g.Normalized
                             })
-                            .Where(w => w.ShowpieceID == showpieceID)
+                            .Where(w => w.ShowpieceID == Showpiece.ShowpieceID)
                             .Select(s => s.GenreID.ToString())
                             .ToArray();
+
+            var user = await _userManager.FindByIdAsync(Showpiece.UserID.ToString());
+            Username = user.UserName;
 
             return Page();
         }
@@ -93,7 +95,13 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
             {
                 if(!await _context.Genre.AnyAsync(a => a.GenreID.ToString() == genre))
                 {
+                    GenreChoices = await _context.Genre.Select(s => new SelectListItem
+                    {
+                        Value = s.GenreID.ToString(),
+                        Text = s.Name
+                    }).ToListAsync();
                     ModelState.AddModelError("Validation.Genre.IsInvalid", "An unknown Genre was provided");
+                    return Page();
                 }
             }
 

@@ -101,7 +101,7 @@ namespace mtgdm.Areas.Identity.Pages.Account
                     
                     var confirmAccountModel = new EmailCallbackViewModel(callbackUrl);
                     string body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/ConfirmAccountEmail.cshtml", confirmAccountModel);
-                    await _emailSender.SendEmailAsync(Input.Email, "MTGDM - Complete registration", body);
+                    await _emailSender.SendEmailAsync(Input.Email, "mtgdm - Complete registration", body);
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {

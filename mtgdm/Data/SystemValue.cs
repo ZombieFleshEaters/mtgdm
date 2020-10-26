@@ -12,7 +12,10 @@ namespace mtgdm.Data
         [StringLength(255)]
         public string Key { get; set; }
 
-        [StringLength(1000)]
+        [StringLength(int.MaxValue)]
         public string Value { get; set; }
+
+        public bool ShowOnList { get; set; }
+
     }
 }

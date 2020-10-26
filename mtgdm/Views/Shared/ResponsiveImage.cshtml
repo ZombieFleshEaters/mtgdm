@@ -1,0 +1,8 @@
+﻿@using mtgdm.Views.Shared
+@model ResponsiveImageViewModel
+
+<img alt="@Model.Title"
+     class="mediabox-img lazyload" 
+     data-lowsrc="@Model.ImageDefault"
+     data-sizes="auto"
+     data-srcset="@Model.ImageSources" />

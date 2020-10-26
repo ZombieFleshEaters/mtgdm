@@ -1,4 +1,4 @@
-﻿@page "/delete/{ShowpieceID}"
+﻿@page "/delete/{name}"
 @model mtgdm.Pages.Showpiece.DeleteModel
 @{
     ViewData["Title"] = "Delete showpiece";
@@ -8,7 +8,9 @@
 <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
     <ul>
         <li><a asp-page="/Showpiece/List">Gallery</a></li>
-        <li class="is-active"><a asp-page="/Showpice/Delete" asp-route-ShowpieceID="@Model.Showpiece.ShowpieceID">Delete showpiece</a></li>
+        <li><a asp-page="/User/Index" asp-route-UserID="@Model.Showpiece.UserID">@Model.Username</a></li>
+        <li><a asp-page="/Showpiece/View" asp-route-Name="@Model.Showpiece.Slug">@Model.Showpiece.Title</a></li>
+        <li class="is-active"><a asp-page="/Showpice/Delete" asp-route-ShowpieceID="@Model.Showpiece.ShowpieceID">Delete</a></li>
     </ul>
 </nav>
 

@@ -1,4 +1,63 @@
-﻿@page
+﻿@page "/moderator/genres"
 @model mtgdm.Pages.Moderator.Genre.ListModel
 @{
+    ViewData["Title"] = "Genres";
+    ViewData["ReturnURL"] = Url.Page("/Moderator/Genre/List");
+}
+
+<div class="columns is-vertical">
+    <div class="column is-7">
+        <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+            <ul>
+                <li><a asp-page="/Moderator/Index">Moderator</a></li>
+                <li class="is-active"><a asp-page="/Moderator/Genre/List">Genres</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="column">
+        <div class="level">
+            <div class="level-left"></div>
+            <div class="level-right">
+                <div class="buttons">
+                    <a asp-page="/Moderator/Genre/Add" class="button is-primary is-small is-rounded">
+                        <span class="icon">
+                            <i class="fas fa-plus fa-lg"></i>
+                        </span>
+                        <span>Add genre</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.Genres.Count > 0)
+{
+    <table class="table is-striped is-fullwidth">
+        <thead>
+            <tr>
+                <th>Genre</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var genre in Model.Genres)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(v => genre.Name)</td>
+                    <td>
+                        <div class="buttons is-pulled-right">
+                            <a asp-page="/Moderator/Genre/Edit" asp-route-GenreID="@genre.GenreID" class="button is-small is-primary">
+                                <span class="icon"><i class="fas fa-edit"></i></span><span>Edit</span>
+                            </a>
+                            <a asp-page="/Moderator/Genre/Delete" asp-route-GenreID="@genre.GenreID" class="button is-small is-danger is-light">
+                                <span class="icon"><i class="fas fa-trash-alt"></i></span><span>Delete</span>
+                            </a>
+                        </div>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }

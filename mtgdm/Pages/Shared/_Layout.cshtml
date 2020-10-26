@@ -1,6 +1,6 @@
 ﻿@using Microsoft.Extensions.Configuration
 @inject IConfiguration Configuration
-<!--This HAS to be here an not in CSS. Don't get clever, or the main page hero will not render-->
+<!--This HAS to be here and not in CSS. Don't get clever, or the main page hero will not render-->
 <style>
     body {
         display: flex;
@@ -18,8 +18,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="Description" content="A gallery of movie posters and box art that doesn't exist.">
+    <meta name="Description" content="The last best place for movie posters and box art that does not exist">
     <meta property="og:site_name" content="Make this god damn movie" />
+    <meta property="fb:app_id" content="@Configuration["Facebook.OAuth.AppID"]" />
 
     @if (ViewData["ogp.Image"] != null)
     {
@@ -28,7 +29,7 @@
     }
     else
     {
-        <meta property="og:image" content="https://s3-ap-southeast-2.amazonaws.com/img.mtgdm/layout/mtgdm_email_banner.png" />
+        <meta property="og:image" content="@Configuration["AWS.CloudFront.URL"]layout/mtgdm_email_banner.png" />
         <meta property="og:image:type" content="image/png" />
     }
 
@@ -47,6 +48,10 @@
     {
         <meta property="og:description" content="@ViewData["ogp.Description"]" />
     }
+    else
+    {
+        <meta property="og:description" content="The last best place for movie posters and box art that does not exist" />
+    }
     <title>mtgdm - @ViewData["Title"]</title>
 
     <link rel="stylesheet" href="~/css/bulmaswatch.min.css" />
@@ -54,6 +59,9 @@
     <link rel="stylesheet" href="~/lib/@Html.Raw("@")creativebulma/bulma-tagsinput/dist/css/bulma-tagsinput.min.css" />
     <link rel="stylesheet" type="text/css" href="~/lib/star-rating-svg/src/css/star-rating-svg.css">
     <link rel="stylesheet" href="~/css/site.css" />
+
+    <script src="~/lib/blur-up/ls.blur-up.min.js" async></script>
+    <script src="~/lib/lazysizes/lazysizes.min.js" async></script>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=@Configuration["Google.Analytics.TrackingID"]"></script>
@@ -72,7 +80,7 @@
             <div class="navbar-brand">
 
                 <a class="navbar-item" asp-page="/index">
-                    <img src="https://dpwif1tvejv9j.cloudfront.net/mtgdm_logo.png" alt="MTGDM" width="112" height="28">
+                    <img src="@Configuration["AWS.CloudFront.URL"]layout/mtgdm_logo.png" alt="Make this god damn movie" title="Make this god damn movie" width="112" height="28">
                 </a>
 
                 <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navBarBurger">
@@ -108,6 +116,15 @@
                                 <i class="fas fa-user-secret fa-lg"></i>
                             </span>
                             <span>&nbsp; Admin</span>
+                        </a>
+                    }
+                    @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                    {
+                        <a class="navbar-item" asp-page="/Moderator/Index">
+                            <span class="icon is-small">
+                                <i class="fas fa-user-astronaut fa-lg"></i>
+                            </span>
+                            <span>&nbsp; Moderator</span>
                         </a>
                     }
                 </div>

@@ -1,10 +1,9 @@
 ﻿@page "/admin/system-values/edit/{SystemValueKey}"
 @model mtgdm.Pages.Admin.SystemValues.EditModel
 @{
-    ViewData["Title"] = $"System value edit";
+    ViewData["Title"] = $"Edit system value";
     ViewData["ReturnURL"] = Url.Page("/Admin/SystemValues/Edit", new { SystemValueKey = @Model.SystemValue.Key });
 }
-
 
 <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
     <ul>
@@ -13,6 +12,7 @@
         <li class="is-active"><a href="/">@Model.SystemValue.Key</a></li>
     </ul>
 </nav>
+
 <form class="form-is-clean" method="post">
     <div class="column is-8 box">
 
@@ -28,14 +28,22 @@
         </div>
 
         <div class="field">
-            <div class="control has-icons-left has-icons-right">
-                <input class="input" asp-for="SystemValue.Value" placeholder="Title" autocomplete="off">
-                <span class="icon is-large is-left">
-                    <i class="fas fa-edit fa-lg" title="Film title"></i>
-                </span>
+            <div class="control has-icons-left">
+                <textarea class="textarea" asp-for="SystemValue.Value" placeholder="Value" autocomplete="off" rows="5"></textarea>
             </div>
             <span class="help is-danger" asp-validation-for="SystemValue.Value"></span>
         </div>
+
+        <div class="field">
+            <div class="control has-icons-left has-icons-right">
+                <label class="checkbox">
+                    <input type="checkbox" asp-for="SystemValue.ShowOnList">
+                    Display value on list
+                </label>
+            </div>
+            <span class="help is-danger" asp-validation-for="SystemValue.ShowOnList"></span>
+        </div>
+
         @Html.HiddenFor(h => h.SystemValue.Key)
         <div class="buttons">
             <button type="submit" class="button is-primary">

@@ -24,6 +24,7 @@
     ".NETCoreApp,Version=v3.1": {
       "mtgdm/1.0.0": {
         "dependencies": {
+          "Google.Apis.Analytics.v3": "1.49.0.1679",
           "Microsoft.AspNetCore.Authentication.Facebook": "3.1.8",
           "Microsoft.AspNetCore.Authentication.Google": "3.1.8",
           "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "3.1.1",
@@ -307,6 +308,69 @@
           "mtgdm.dll": {}
         }
       },
+      "Google.Apis/1.49.0": {
+        "dependencies": {
+          "Google.Apis.Core": "1.49.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.dll": {
+            "assemblyVersion": "1.49.0.0",
+            "fileVersion": "1.49.0.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Apis.dll": {}
+        }
+      },
+      "Google.Apis.Analytics.v3/1.49.0.1679": {
+        "dependencies": {
+          "Google.Apis": "1.49.0",
+          "Google.Apis.Auth": "1.49.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.Analytics.v3.dll": {
+            "assemblyVersion": "1.49.0.1679",
+            "fileVersion": "1.49.0.1679"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Apis.Analytics.v3.dll": {}
+        }
+      },
+      "Google.Apis.Auth/1.49.0": {
+        "dependencies": {
+          "Google.Apis": "1.49.0",
+          "Google.Apis.Core": "1.49.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.Auth.PlatformServices.dll": {
+            "assemblyVersion": "1.49.0.0",
+            "fileVersion": "1.49.0.0"
+          },
+          "lib/netstandard2.0/Google.Apis.Auth.dll": {
+            "assemblyVersion": "1.49.0.0",
+            "fileVersion": "1.49.0.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Apis.Auth.PlatformServices.dll": {},
+          "lib/netstandard2.0/Google.Apis.Auth.dll": {}
+        }
+      },
+      "Google.Apis.Core/1.49.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.3"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.Core.dll": {
+            "assemblyVersion": "1.49.0.0",
+            "fileVersion": "1.49.0.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Apis.Core.dll": {}
+        }
+      },
       "Microsoft.AspNetCore.Authentication.Facebook/3.1.8": {
         "runtime": {
           "lib/netcoreapp3.1/Microsoft.AspNetCore.Authentication.Facebook.dll": {
@@ -392,7 +456,7 @@
         "dependencies": {
           "Microsoft.Extensions.FileProviders.Embedded": "3.1.1",
           "Microsoft.Extensions.Identity.Stores": "3.1.1",
-          "Newtonsoft.Json": "12.0.2"
+          "Newtonsoft.Json": "12.0.3"
         },
         "runtime": {
           "lib/netcoreapp3.1/Microsoft.AspNetCore.Identity.UI.Views.V3.dll": {
@@ -1117,7 +1181,7 @@
       },
       "Microsoft.VisualStudio.Web.CodeGeneration.Contracts/3.1.4": {
         "dependencies": {
-          "Newtonsoft.Json": "12.0.2"
+          "Newtonsoft.Json": "12.0.3"
         },
         "runtime": {
           "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Contracts.dll": {
@@ -1133,7 +1197,7 @@
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection": "3.1.1",
           "Microsoft.VisualStudio.Web.CodeGeneration.Templating": "3.1.4",
-          "Newtonsoft.Json": "12.0.2"
+          "Newtonsoft.Json": "12.0.3"
         },
         "runtime": {
           "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Core.dll": {
@@ -1195,7 +1259,7 @@
         "dependencies": {
           "Microsoft.CodeAnalysis.CSharp.Workspaces": "3.3.1",
           "Microsoft.VisualStudio.Web.CodeGeneration.Contracts": "3.1.4",
-          "Newtonsoft.Json": "12.0.2",
+          "Newtonsoft.Json": "12.0.3",
           "NuGet.Frameworks": "4.7.0"
         },
         "runtime": {
@@ -1294,11 +1358,11 @@
           "System.Xml.XDocument": "4.3.0"
         }
       },
-      "Newtonsoft.Json/12.0.2": {
+      "Newtonsoft.Json/12.0.3": {
         "runtime": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {
             "assemblyVersion": "12.0.0.0",
-            "fileVersion": "12.0.2.23222"
+            "fileVersion": "12.0.3.23909"
           }
         },
         "compile": {
@@ -1338,7 +1402,7 @@
       "Pomelo.JsonObject/2.2.1": {
         "dependencies": {
           "Microsoft.CSharp": "4.7.0",
-          "Newtonsoft.Json": "12.0.2"
+          "Newtonsoft.Json": "12.0.3"
         },
         "runtime": {
           "lib/netstandard2.0/Pomelo.JsonObject.dll": {
@@ -2378,7 +2442,7 @@
       "Tinify/1.5.2": {
         "dependencies": {
           "NETStandard.Library": "1.6.1",
-          "Newtonsoft.Json": "12.0.2"
+          "Newtonsoft.Json": "12.0.3"
         },
         "runtime": {
           "lib/netstandard1.4/Tinify.dll": {
@@ -3982,6 +4046,34 @@
       "serviceable": false,
       "sha512": ""
     },
+    "Google.Apis/1.49.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-fmXQQTxZFOBlnvokvdQMzq0Lt+g2QzpZ4H6U8lMMFHgAR8ZqxQnPN5yHDpoHf7a++hJHb5W3pALxauGsq+afKQ==",
+      "path": "google.apis/1.49.0",
+      "hashPath": "google.apis.1.49.0.nupkg.sha512"
+    },
+    "Google.Apis.Analytics.v3/1.49.0.1679": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-WwCaEnipvHJXQHob9D6mJb6ZihHPk68YhMTu3IvB0Q6Nusaz6Y5cRWRxl8d3F8hMdS86dcCD8Fmz4r3v8x9xfg==",
+      "path": "google.apis.analytics.v3/1.49.0.1679",
+      "hashPath": "google.apis.analytics.v3.1.49.0.1679.nupkg.sha512"
+    },
+    "Google.Apis.Auth/1.49.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3V9ohvixQtjaEvk7T9Ac7E/KvwEPa7eL4aMNreJDI0CEPzCdQdk2zCvaJPRrNIjhe+UuBeOeom1oAOMFB74JHg==",
+      "path": "google.apis.auth/1.49.0",
+      "hashPath": "google.apis.auth.1.49.0.nupkg.sha512"
+    },
+    "Google.Apis.Core/1.49.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9DgGdtyzgrCfHWwc/HiDXDbykNMeKQozbEHYEUEcezRuH+YR3fvq7YGVBDmUM8g6qEL3kDk6h5EU4h0IJwue1w==",
+      "path": "google.apis.core/1.49.0",
+      "hashPath": "google.apis.core.1.49.0.nupkg.sha512"
+    },
     "Microsoft.AspNetCore.Authentication.Facebook/3.1.8": {
       "type": "package",
       "serviceable": true,
@@ -4409,12 +4501,12 @@
       "path": "netstandard.library/1.6.1",
       "hashPath": "netstandard.library.1.6.1.nupkg.sha512"
     },
-    "Newtonsoft.Json/12.0.2": {
+    "Newtonsoft.Json/12.0.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-rTK0s2EKlfHsQsH6Yx2smvcTCeyoDNgCW7FEYyV01drPlh2T243PR2DiDXqtC5N4GDm4Ma/lkxfW5a/4793vbA==",
-      "path": "newtonsoft.json/12.0.2",
-      "hashPath": "newtonsoft.json.12.0.2.nupkg.sha512"
+      "sha512": "sha512-6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg==",
+      "path": "newtonsoft.json/12.0.3",
+      "hashPath": "newtonsoft.json.12.0.3.nupkg.sha512"
     },
     "NuGet.Frameworks/4.7.0": {
       "type": "package",

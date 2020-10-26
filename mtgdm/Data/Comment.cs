@@ -13,7 +13,7 @@ namespace mtgdm.Data
         public Guid ShowpieceID { get; set; }
         public Guid UserID { get; set; }
 
-        [Display(Name = "Comment", Prompt = "Comment (optional)")]
+        [Display(Name = "Comment", Prompt = "Comment")]
         [Required]
         [StringLength(int.MaxValue, MinimumLength = 3, ErrorMessage = "Comments must be at least 3 characters")]
         public string Content { get; set; }

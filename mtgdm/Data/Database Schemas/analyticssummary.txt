@@ -1,0 +1,6 @@
+CREATE TABLE `analyticssummary` (
+  `AnalyticsSummaryID` varchar(36) COLLATE utf8mb4_bin NOT NULL,
+  `Created` datetime NOT NULL,
+  `RowCount` int(11) NOT NULL,
+  PRIMARY KEY (`AnalyticsSummaryID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
