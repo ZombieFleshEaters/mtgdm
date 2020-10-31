@@ -27,11 +27,8 @@ namespace mtgdm.Helpers
             using (IServiceScope scope = _serviceProvider.CreateScope())
             using (ApplicationDbContext ctx = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
             {
-                var emails = ctx.Users.Select(x => x.Email).ToList();
-                
                 var rslt = CallAPIGetResults();
 
-                //Do database maintenance
                 var summary = new AnalyticsSummary()
                 {
                     AnalyticsSummaryID = Guid.NewGuid(),
@@ -58,9 +55,6 @@ namespace mtgdm.Helpers
                 ctx.AnalyticsSummary.Add(summary);
                 ctx.AnalyticsDetail.AddRange(details);
                 ctx.SaveChanges();
-
-                var jjj = "Hello";
-
             }
             return Task.CompletedTask;
         }
@@ -77,7 +71,7 @@ namespace mtgdm.Helpers
                 HttpClientInitializer = cred
             });
 
-            var request = service.Data.Ga.Get("ga:231311528",
+            var request = service.Data.Ga.Get(_config["Google.Analytics.ProfileID"],
                                               new DateTime(2020, 10, 01).ToString("yyy-MM-dd"),
                                               DateTime.Now.ToString("yyy-MM-dd"),
                                               "ga:visitors,ga:uniquePageviews");

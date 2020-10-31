@@ -5,36 +5,105 @@
     ViewData["ReturnURL"] = Url.Page("/index");
 }
 
-<div id="main-hero" class="hero is-black is-bold is-fullheight-with-navbar">
-    <div class="hero-body">
-        <div class="container">
-            <div class="columns is-mobile is-centered">
-                <div class="column">
-                    <div class="content">
-                        <section class="section"></section>
-                        <section class="section"></section>
-                        <section class="section is-mobile"></section>
-                        <h1 class="title has-text-primary-light text is-size-1 is-size-4-mobile">Make this god damn movie</h1>
-                        <h2 id="mtgdm_subtitle" class="subtitle is-size-3 is-size-6-mobile">The <span class="has-text-link">last best place</span>  for movie posters and box art</h2>
+    <div id="main-hero" class="hero is-black is-bold is-fullheight-with-navbar">
+
+        <div class="hero-body">
+
+            <div class="container">
+                
+                <div class="columns is-mobile is-centered">
+                    <div class="column">
+                        <div class="content">
+                            <section class="section"></section>
+                            <section class="section"></section>
+                            <section class="section is-mobile"></section>
+                            <h1 class="title has-text-primary-light text is-size-1 is-size-4-mobile">Make this god damn movie</h1>
+                            <h2 id="mtgdm_subtitle" class="subtitle is-size-3 is-size-6-mobile">The <span class="has-text-link">last best place</span>  for movie posters and box art</h2>
+                        </div>
+                        <div class="level">
+                            <div class="level-left"></div>
+                            <div class="level-right">
+                                <div class="level-item">
+                                    <span>Follow me on Facebook &nbsp;</span>
+                                    <a href="https://www.facebook.com/MTGDM-110783157497505" target="_blank" rel="noreferrer">
+                                        <span class="icon">
+                                            <i class="fab fa-facebook-square fa-2x"></i>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 <section class="hero section has-text-centered">
     <div class="hero-body">
         <div class="container">
             <div class="content">
-                <h1 class="title is-1 is-spaced">Who we are</h1>
-                <p class="subtitle is-4">
-                    We appreciate the culture of video rental stores, movie theaters, and the art they displayed.
+                @*<h3 class="title is-size-3">Who we are</h3>*@
+                <p class="is-size-5">
+                    Hi, I am Mathew Adams, and I am the creator of Make This God Damn Movie.<br /><br />
+
+                    MTGDM is a <span class="has-text-success">free</span> platform that concentrates on the art of movie posters and box art that does not exist. I appreciate the culture of video rental stores, movie theaters, and the art they displayed. My hope is the art you see and share here inspires media creators for their next projects.
                 </p>
+                <div class="buttons is-centered">
+                    <a asp-page="/Showpiece/List" class="button is-primary is-large">
+                        <span class="icon"><i class="fas fa-film fa-lg fa-fw" aria-hidden="true"></i></span><span> &nbsp; View gallery</span>
+                    </a>
+                    <a asp-area="Identity" asp-page="/Account/Register" class="button is-primary is-large">
+                        <span class="icon"><i class="fas fa-user-plus fa-lg fa-fw" aria-hidden="true"></i></span><span> &nbsp; Register</span>
+                    </a>
+                </div>
+
             </div>
         </div>
     </div>
 </section>
+
+
+<section id="features" class="section has-text-centered">
+    <div class="container">
+        <div class="columns is-vcentered">
+            <div class="column">
+                <h3 class="title is-size-3">
+                    Show your work
+                </h3>
+                <p class="subtitle">
+                    Reach a larger audenience with accessible and with mobile-first responsive technologies
+                </p>
+            </div>
+            <div class="column">
+                <div class="image">
+                    <img src="https://d184nsmeqdq57b.cloudfront.net/layout/mtgdm_resonsive_layout.png" alt="mtdgm responsive layout" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="columns reverse-row-order is-vcentered">
+
+            <div class="column">
+                <div class="image">
+                    <img src="https://d184nsmeqdq57b.cloudfront.net/layout/mtgdm_facebook_share.png" alt="mtdgm share on Facebook" />
+                </div>
+            </div>
+            <div class="column">
+                <h3 class="title is-size-3">
+                    Share on social media
+                </h3>
+                <p class="subtitle">
+                    Make your friends jealous by directly sharing your work to Facebook and Twitter
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- END Features -->
+
 
 <div id="main-rules" class="section">
     <div class="container has-text-centered">

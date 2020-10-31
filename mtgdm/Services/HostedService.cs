@@ -25,7 +25,7 @@ namespace mtgdm.Services
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _timer = new Timer(SyncAnalytics, null, TimeSpan.Zero, TimeSpan.FromMinutes(2));
+            _timer = new Timer(SyncAnalytics, null, TimeSpan.Zero, TimeSpan.FromMinutes(30));
             return Task.CompletedTask;
         }
 

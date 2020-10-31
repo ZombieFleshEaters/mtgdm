@@ -90,3 +90,14 @@
 .breadcrumb a {
     padding: 0 .5em;
 }
+
+
+@media(max-width: 1024px) {
+    .reverse-row-order {
+        flex-direction: column-reverse;
+        display: flex;
+    }
+}
+.breadcrumb a {
+    padding: 0 .3em;
+}

@@ -73,19 +73,17 @@
     }
 </div>
 
-<div class="columns">
+<div class="columns reverse-row-order">
     <div class="column is-7">
-        <div class="box">
-            <figure class="image showpiece-image is-2by3">
-                <partial name="ResponsiveImage" model="new ResponsiveImageViewModel(@Model.Showpiece.URL, @Model.Showpiece.Title, 800)" />
-            </figure>
-        </div>
+        <figure class="image showpiece-image is-2by3">
+            <partial name="ResponsiveImage" model="new ResponsiveImageViewModel(@Model.Showpiece.URL, @Model.Showpiece.Title, 800)" />
+        </figure>
     </div>
 
     <div class="column is-5">
         <div class="box">
             <div class="field right-left">
-                <div class="mb-2">
+                <div class="">
                     <p class="title is-5">
                         <span>@Model.Showpiece.Title</span>
                     </p>
@@ -99,10 +97,10 @@
                     </p>
                 </div>
                 <div class="buttons">
-                    <a class="button is-primary" href="https://twitter.com/intent/tweet?url=@ViewData["ogp.FullURL"]&text=Make this god damn movie - @ViewData["ogp.Title"]&hashtag=mtgdm" target="_blank">
+                    <a style="border:none;" class="button is-small" href="https://twitter.com/intent/tweet?url=@ViewData["ogp.FullURL"]&text=Make this god damn movie - @ViewData["ogp.Title"]&hashtag=mtgdm" target="_blank">
                         <span class="icon is-medium"><i class="fab fa-twitter-square fa-2x"></i></span>
                     </a>
-                    <a class="button is-primary" href="https://www.facebook.com/dialog/feed?&app_id=@Configuration["Facebook.OAuth.AppID"]&link=@ViewData["ogp.FullURL"]&display=page&quote=@ViewData["ogp.Title"]&hashtag=mtgdm" target="_blank">
+                    <a style="border:none;" class="button is-small" href="https://www.facebook.com/dialog/feed?&app_id=@Configuration["Facebook.OAuth.AppID"]&link=@ViewData["ogp.FullURL"]&display=page&quote=@ViewData["ogp.Title"]&hashtag=mtgdm" target="_blank">
                         <span class="icon is-medium"><i class="fab fa-facebook-square fa-2x"></i></span>
                     </a>
                 </div>
@@ -119,18 +117,19 @@
                                 @Html.Hidden("rating", Model.Rating)
                             </form>
                         </div>
+                        <div class="level-item">
+                            <div class="content">
+                                <p class="subtitle is-7">@Model.RatingCount votes</p>
+                            </div>
+                        </div>
                     </div>
                     <div class="level-right is-size-7">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <a asp-page="/User/Report/Add" asp-route-Name="@Model.Showpiece.Slug">Report</a>
-                        }
                     </div>
                 </div>
             </div>
 
             <div class="field">
-                <p class="is-size7 has-line-breaks">@Model.Showpiece.Synopsis</p>
+                <p class="is-size-6 has-line-breaks">@Model.Showpiece.Synopsis</p>
             </div>
 
             <div class="field">
@@ -142,6 +141,27 @@
                             <span class="tag is-normal is-light is-small">@genre.Name</span>
                         }
                     }
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="level is-mobile subtitle is-size-7">
+                    <div class="level-left">
+                        <div class="level-item">
+                            <p title="Last updated: @Model.AnalyticsSummary.Created.ToString("dddd, dd MMMM yyyy HH:mm:ss")">Views: @Model.AnalyticsDetail.Views</p>
+                        </div>
+                        <div class="level-item">
+                            <p title="Last updated: @Model.AnalyticsSummary.Created.ToString("dddd, dd MMMM yyyy HH:mm:ss")">Visitors: @Model.AnalyticsDetail.Visitors</p>
+                        </div>
+                    </div>
+                    <div class="level-right">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="level-item">
+                                <a asp-page="/User/Report/Add" asp-route-Name="@Model.Showpiece.Slug">Report</a>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
         </div>

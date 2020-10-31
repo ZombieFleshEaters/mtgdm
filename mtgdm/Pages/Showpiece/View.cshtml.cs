@@ -17,6 +17,8 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
     [AllowAnonymous]
     public class ViewModel : PageModel
     {
+        private const string PageURITemplate = "/view/{0}";
+
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _config;
         private readonly UserManager<IdentityUser> _userManager;
@@ -60,6 +62,15 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
         [BindProperty]
         public bool CanEdit { get; set; }
 
+        [BindProperty]
+        public AnalyticsDetail AnalyticsDetail { get; set; }
+
+        [BindProperty]
+        public AnalyticsSummary AnalyticsSummary { get; set; }
+
+        [BindProperty]
+        public long RatingCount { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
             Showpiece = await _context.Showpiece.FirstOrDefaultAsync(f => f.Slug == Name);
@@ -89,6 +100,8 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
                                                 .AverageAsync(a => (decimal?)a.Rating);
                 Rating = totalRating ?? decimal.Zero;
             }
+
+            RatingCount = await _context.ShowpieceRating.AsNoTracking().Where(w => w.ShowpieceID == Showpiece.ShowpieceID).LongCountAsync();
 
             var user = await _userManager.FindByIdAsync(Showpiece.UserID.ToString());
 
@@ -138,14 +151,26 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
                 var isSameUser = _userManager.GetUserId(User) == comment.Comment.UserID.ToString();
                 comment.CanDelete = isAdmin || isMod || isSameUser;
             }
+
             var isCurrentAdmin = false;
+            var isCurrentMod = false;
             if(User.Identity.IsAuthenticated)
             {
-                isCurrentAdmin = await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(User), "Admin");
+                var currentUser = await _userManager.GetUserAsync(User);
+                isCurrentAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin");
+                isCurrentMod = await _userManager.IsInRoleAsync(currentUser, "Moderator");
             }
             var isCurrentSameUser = _userManager.GetUserId(User) == Showpiece.UserID.ToString();
 
-            CanEdit = isCurrentAdmin || isCurrentSameUser;
+            CanEdit = isCurrentAdmin || isCurrentMod || isCurrentSameUser;
+
+            AnalyticsDetail = await _context.AnalyticsDetail.FirstOrDefaultAsync(w => w.PagePath == string.Format(PageURITemplate, Showpiece.Slug));
+            if (AnalyticsDetail == null)
+                AnalyticsDetail = new AnalyticsDetail();
+
+            AnalyticsSummary = await _context.AnalyticsSummary.FirstOrDefaultAsync();
+            if (AnalyticsSummary == null)
+                AnalyticsSummary = new AnalyticsSummary() { Created = new DateTime(9999, 12, 31) };
 
             return Page();
         }
@@ -158,11 +183,6 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
                 ModelState.AddModelError("Comment.Length", "Comments must be at least 3 characters");
                 return Page();
             }
-
-            //if (string.IsNullOrEmpty(ShowpieceID) || !Guid.TryParse(ShowpieceID, out Guid showpieceID))
-            //{
-            //    return new RedirectToPageResult("/Showpice/List");
-            //}
 
             Showpiece = await _context.Showpiece.FirstOrDefaultAsync(f => f.ShowpieceID == Showpiece.ShowpieceID);
 
@@ -177,8 +197,6 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
             await _context.Comment.AddAsync(Comment);
             await _context.SaveChangesAsync();
 
-
-
             return new RedirectToPageResult("/Showpiece/View", new { name = Showpiece.Slug });
         }
 
@@ -189,12 +207,6 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
                 await OnGetAsync();
                 return Page();
             }
-
-            //if (string.IsNullOrEmpty(ShowpieceID) || !Guid.TryParse(ShowpieceID, out Guid showpieceID))
-            //{
-            //    await OnGetAsync();
-            //    return Page();
-            //}
 
             var comment = await _context.Comment.FirstOrDefaultAsync(f => f.CommentID == Comment.CommentID);
             if (comment == null)

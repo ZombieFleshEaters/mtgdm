@@ -108,11 +108,10 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
 
                 var source = Tinify.FromBuffer(input.ToArray());
 
-                //var head = new Dictionary<string, string>() {
-                //    { "Cache-Control", "max-age=31536000" }
-                //};
-
-                //var jsonHeader = System.Text.Json.JsonSerializer.Serialize(head);
+                //Headers aren't passing to cloudfront: https://github.com/cagataygurturk/image-resizer-service/issues/7
+                var head = new Dictionary<string, string>() {
+                    { "Cache-Control", "max-age=31536000" }
+                };
 
                 await source.Store(new
                 {
@@ -120,7 +119,8 @@ namespace mtgdm.Areas.Identity.Pages.Showpiece
                     aws_access_key_id = _config["AWS.S3.AccessKeyId"],
                     aws_secret_access_key = _config["AWS.S3.SecretKey"],
                     region = region,
-                    path = bucket + fileName
+                    path = bucket + fileName,
+                    headers = head
                 });
             }
             catch (AccountException e)
